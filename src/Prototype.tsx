@@ -8,10 +8,10 @@ import { Lightbulb, Target, Zap, Trophy } from 'lucide-react';
 const CHALLENGES = [
   {
     id: 1,
-    title: 'Texture Trickster',
-    description: 'Find images with misleading textures',
+    title: 'Pixel Attack',
+    description: 'Find images with altered pixels',
     difficulty: 'Easy',
-    hint: 'Look for objects with unusual patterns',
+    hint: 'Look for a pixel that is out of place',
   },
   {
     id: 2,
@@ -38,7 +38,7 @@ const IMAGE_POOL = [
   { id: 6, name: 'Abstract art', cnnFools: true, vitFools: true },
 ];
 
-export function PrototypeTwo() {
+export function Prototype() {
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(null);
   const [selectedImages, setSelectedImages] = useState<number[]>([]);
   const [score, setScore] = useState(0);
@@ -73,15 +73,14 @@ export function PrototypeTwo() {
         <CardHeader>
           <CardTitle>Prototype Game</CardTitle>
           <CardDescription>
-            Challenge: Find images that fool one model but not the other. Understand each model's weaknesses!
+            Challenge: Select images that fool this model. Understand the different kinds of adversarial attacks!
           </CardDescription>
         </CardHeader>
         <CardContent className="space-y-6">
           <Alert>
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
-              <strong>Game Concept:</strong> Players are given challenges to find specific types of "adversarial" images
-              that exploit the weaknesses of CNNs vs ViTs. They learn about failure modes through gameplay.
+              <strong>Game Concept:</strong>
             </AlertDescription>
           </Alert>
 
