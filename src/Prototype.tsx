@@ -30,12 +30,49 @@ const CHALLENGES = [
 ];
 
 const IMAGE_POOL = [
-  { id: 1, name: 'Cat on keyboard', cnnFools: false, vitFools: false },
-  { id: 2, name: 'Chihuahua or muffin?', cnnFools: true, vitFools: false },
-  { id: 3, name: 'Dog underwater', cnnFools: false, vitFools: false },
-  { id: 4, name: 'Upside-down bird', cnnFools: true, vitFools: false },
-  { id: 5, name: 'Camouflaged lizard', cnnFools: false, vitFools: true },
-  { id: 6, name: 'Abstract art', cnnFools: true, vitFools: true },
+  {
+    id: 1,
+    name: 'Cat on keyboard',
+    cnnFools: false,
+    vitFools: false,
+    // Example remote image (replace with local path like '/images/cat.jpg' if you add files to /public/images)
+    src: 'https://images.unsplash.com/photo-1518791841217-8f162f1e1131?auto=format&fit=crop&w=800&q=60',
+  },
+  {
+    id: 2,
+    name: 'Chihuahua or muffin?',
+    cnnFools: true,
+    vitFools: false,
+    src: 'https://images.unsplash.com/photo-1546182990-dffeafbe841d?auto=format&fit=crop&w=800&q=60',
+  },
+  {
+    id: 3,
+    name: 'Dog underwater',
+    cnnFools: false,
+    vitFools: false,
+    src: 'https://images.unsplash.com/photo-1507149833265-60c372daea22?auto=format&fit=crop&w=800&q=60',
+  },
+  {
+    id: 4,
+    name: 'Upside-down bird',
+    cnnFools: true,
+    vitFools: false,
+    src: 'https://images.unsplash.com/photo-1494575194354-3f6d2b2b1f77?auto=format&fit=crop&w=800&q=60',
+  },
+  {
+    id: 5,
+    name: 'Camouflaged lizard',
+    cnnFools: false,
+    vitFools: true,
+    src: 'https://images.unsplash.com/photo-1501706362039-c6e8091bf1c6?auto=format&fit=crop&w=800&q=60',
+  },
+  {
+    id: 6,
+    name: 'Abstract art',
+    cnnFools: true,
+    vitFools: true,
+    src: 'https://images.unsplash.com/photo-1543340713-6b5b9d24b1bb?auto=format&fit=crop&w=800&q=60',
+  },
 ];
 
 export function Prototype() {
@@ -161,8 +198,16 @@ export function Prototype() {
                           isWrong ? 'border-red-500 bg-red-500/10' : ''
                         } ${isMissed ? 'border-yellow-500 bg-yellow-500/10' : ''}`}
                       >
-                        <div className="aspect-square bg-muted rounded border flex items-center justify-center mb-2">
-                          <span className="opacity-50">[IMG {img.id}]</span>
+                        <div className="aspect-square bg-muted rounded border flex items-center justify-center mb-2 overflow-hidden">
+                          <img
+                            src={img.src}
+                            alt={img.name}
+                            className="object-cover w-full h-full"
+                            onError={(e) => {
+                              // Fallback to a placeholder image if the remote image fails to load
+                              (e.currentTarget as HTMLImageElement).src = 'https://via.placeholder.com/800?text=Image+Unavailable';
+                            }}
+                          />
                         </div>
                         <p className="text-sm text-center">{img.name}</p>
                         {revealed && (
