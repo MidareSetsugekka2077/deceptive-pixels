@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
-import { Alert, AlertDescription } from './components/ui/alert';
+// import { Alert, AlertDescription } from './components/ui/alert';
 import { Lightbulb, Target, Zap, Trophy } from 'lucide-react';
 
 const CHALLENGES = [
@@ -15,17 +15,17 @@ const CHALLENGES = [
   },
   {
     id: 2,
-    title: 'Context Confuser',
-    description: 'Find images where background matters',
-    difficulty: 'Medium',
-    hint: 'Objects in unexpected environments',
+    title: 'Pixel Attack',
+    description: 'Find images with altered pixels',
+    difficulty: 'Easy',
+    hint: 'Look for a pixel that is out of place',
   },
   {
     id: 3,
-    title: 'Rotation Master',
-    description: 'Find images that confuse CNNs when rotated',
-    difficulty: 'Hard',
-    hint: 'CNNs are less rotation-invariant',
+    title: 'Pixel Attack',
+    description: 'Find images with altered pixels',
+    difficulty: 'Easy',
+    hint: 'Look for a pixel that is out of place',
   },
 ];
 
@@ -134,18 +134,18 @@ export function Prototype() {
     <div className="space-y-6">
       <Card>
         <CardHeader>
-          <CardTitle>Prototype Game</CardTitle>
-          <CardDescription>
-            Challenge: Select images that fool this model. Understand the different kinds of adversarial attacks!
-          </CardDescription>
+          <CardTitle>Challenge: Select adversarial images that fool the model. Understand the different kinds of adversarial attacks!</CardTitle>
+          {/* <CardDescription>
+            Challenge: Select adversarial images that fool the model. Understand the different kinds of adversarial attacks!
+          </CardDescription> */}
         </CardHeader>
         <CardContent className="space-y-6">
-          <Alert>
+          {/* <Alert>
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
               <strong>Game Concept:</strong>
             </AlertDescription>
-          </Alert>
+          </Alert> */}
 
           {/* Score Display */}
           <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
@@ -153,7 +153,7 @@ export function Prototype() {
               <Trophy className="h-5 w-5 text-chart-4" />
               <span>Current Score: <strong>{score} points</strong></span>
             </div>
-            <Badge variant="secondary">Level 1</Badge>
+            {/* <Badge variant="secondary">Level 1</Badge> */}
           </div>
 
           {/* Challenge Selection */}
@@ -204,7 +204,7 @@ export function Prototype() {
             <>
               <div className="border-2 rounded-lg p-6 bg-background">
                 <div className="flex items-center justify-between mb-4">
-                  <h3>Pick 3 Images That Were Attacked (Adversarially Modified)</h3>
+                  <h3>Pick 3 Images That Were Adversarially Attacked to Fool the CNN Model</h3>
                   <Badge variant="outline">{selectedImageIds.length}/3 selected</Badge>
                 </div>
                 <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
@@ -275,26 +275,26 @@ export function Prototype() {
               {revealed && (
                 <Card className="border-2 border-primary">
                   <CardHeader>
-                    <CardTitle className="text-lg">What You Learned</CardTitle>
+                    <CardTitle className="text-lg">In the real world:</CardTitle>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <div className="grid md:grid-cols-2 gap-4">
                       <div className="space-y-2">
-                        <h4>🔴 CNN Weaknesses:</h4>
+                        <h4>🔴 CNN Model Weaknesses:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                           <li>Easily fooled by pixel-level perturbations</li>
                           <li>Small imperceptible changes can cause misclassification</li>
                           <li>Adversarial examples are a real security concern</li>
                         </ul>
                       </div>
-                      <div className="space-y-2">
+                      {/* <div className="space-y-2">
                         <h4>🔵 ViT Strengths:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
                           <li>Better robustness to adversarial attacks</li>
                           <li>Transformer architecture sees global context</li>
                           <li>More resistant to pixel-level perturbations</li>
                         </ul>
-                      </div>
+                      </div> */}
                     </div>
                   </CardContent>
                 </Card>
