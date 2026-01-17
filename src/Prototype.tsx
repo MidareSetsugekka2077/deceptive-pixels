@@ -3,7 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './com
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
 // import { Alert, AlertDescription } from './components/ui/alert';
-import { Lightbulb, Target, Zap, Trophy } from 'lucide-react';
+import { Target, Zap, Trophy } from 'lucide-react';
 
 const CHALLENGES = [
   {
