@@ -160,7 +160,7 @@ export function Prototype() {
           {/* Score Display */}
           <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
             <div className="flex items-center gap-2">
-              <Trophy className="h-5 w-5 text-chart-4" />
+              <Trophy className="h-5 w-5 text-yellow-500" />
               <span>Current Score: <strong>{score} points</strong></span>
             </div>
             {/* <Badge variant="secondary">Level 1</Badge> */}
