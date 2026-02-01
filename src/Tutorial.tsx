@@ -24,32 +24,32 @@ const TUTORIAL_STEPS = [
     content: 'Convolutional Neural Networks (CNNs) represent a class of deep learning models specifically engineered for processing structured grid data, such as images. CNNs exploit spatial hierarchies in data through a specialized architecture that includes convolutional layers, which apply filters to detect local patterns within the input.',
     highlight: null,
   },
+//   {
+//     id: 3,
+//     title: 'Understanding Vision Transformers',
+//     content: 'Vision Transformers (ViTs) use attention mechanisms to look at the entire image at once. They understand global context better than CNNs, making them possibly more robust to transformations and less fooled by texture alone.',
+//     highlight: null,
+//   },
   {
     id: 3,
-    title: 'Understanding Vision Transformers',
-    content: 'Vision Transformers (ViTs) use attention mechanisms to look at the entire image at once. They understand global context better than CNNs, making them possibly more robust to transformations and less fooled by texture alone.',
-    highlight: null,
-  },
-  {
-    id: 4,
     title: 'Your Mission',
     content: 'Your goal is to find images that will fool the CNN model. Look for images with edits, out of place pixels, or unusual orientations. Start by selecting a challenge below!',
     highlight: 'challenges',
   },
   {
-    id: 5,
+    id: 4,
     title: 'Making Your Selection',
     content: 'Once you pick a challenge, you\'ll see a pool of images. Choose 3 images that you think will fool the CNN based on the challenge requirements.',
     highlight: 'images',
   },
   {
-    id: 6,
+    id: 5,
     title: 'Learning from Results',
     content: 'After submitting, you\'ll see which images actually fool the CNN. Green means you were right, red means the image didn\'t fool the CNN, and yellow means you missed one that would have worked. Pay attention to the images that successfully deceive the models!',
     highlight: 'feedback',
   },
   {
-    id: 7,
+    id: 6,
     title: 'Ready to Play!',
     content: 'Now you know the basics! Try different challenges to explore various attacks. Each successful choice earns you points and teaches you more about how these AI models work. Have fun!',
     highlight: null,
@@ -102,12 +102,6 @@ export function Tutorial({ open, onOpenChange, onComplete }: TutorialProps) {
               <BookOpen className="h-5 w-5 text-primary" />
               <DialogTitle>{currentStep.title}</DialogTitle>
             </div>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={skip}
-            >
-            </Button>
           </div>
           <div className="space-y-2">
             <Progress value={(step / (TUTORIAL_STEPS.length - 1)) * 100} className="h-2" />
@@ -128,14 +122,14 @@ export function Tutorial({ open, onOpenChange, onComplete }: TutorialProps) {
               <span className="text-red-500">🔴</span> CNN Weaknesses:
             </h4>
             <ul className="text-sm space-y-1 list-disc list-inside ml-4">
-              <li>Fooled by similar textures (e.g., muffins vs. dogs)</li>
+              <li>Fooled by tiny, (sometimes) imperceptible perturbations</li>
               <li>Struggles with rotated or upside-down objects</li>
               <li>Focuses on local patterns, misses big picture</li>
             </ul>
           </div>
         )}
 
-        {step === 3 && (
+        {/* {step === 3 && (
           <div className="bg-muted p-4 rounded-lg space-y-2">
             <h4 className="flex items-center gap-2">
               <span className="text-blue-500">🔵</span> ViT Strengths:
@@ -146,23 +140,23 @@ export function Tutorial({ open, onOpenChange, onComplete }: TutorialProps) {
               <li>Uses attention to focus on important parts</li>
             </ul>
           </div>
-        )}
+        )} */}
 
-        {step === 4 && (
+        {step === 3 && (
           <Alert>
             <Target className="h-4 w-4" />
             <AlertDescription>
-              <strong>Pro Tip:</strong> Start with an "Easy" challenge like "Texture Trickster" to practice
+              <strong>Pro Tip:</strong> Start with an "Easy" challenge like "Pixel Attack" to practice
               finding images with misleading patterns that fool CNNs.
             </AlertDescription>
           </Alert>
         )}
 
-        {step === 5 && (
+        {step === 4 && (
           <Alert>
             <Lightbulb className="h-4 w-4" />
             <AlertDescription>
-              <strong>Think like a CNN:</strong> Ask yourself: "Does this image have confusing textures?
+              <strong>Think like a CNN:</strong> Ask yourself: "Does this image feel edited?
               Is it rotated oddly? Is the context unexpected?" If yes, it might fool a CNN!
             </AlertDescription>
           </Alert>
