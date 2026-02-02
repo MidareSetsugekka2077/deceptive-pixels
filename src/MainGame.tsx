@@ -23,9 +23,9 @@ const CHALLENGES = [
   {
     id: 3,
     title: 'Shift Attack',
-    description: 'Find images with altered pixels',
+    description: 'Find images with shifted numbers',
     difficulty: 'Easy',
-    hint: 'Look for a pixel that is out of place',
+    hint: 'Look for images that are closer to edges',
   },
 ];
 
@@ -54,6 +54,56 @@ const PIXEL_ATTACK_IMAGES = {
   ],
 };
 
+// Image lists for rotation attack challenge
+const ROTATE_ATTACK_IMAGES = {
+  original: [
+    '01_idx0_true8_pred8.png',
+    '02_idx1_true4_pred4.png',
+    '03_idx2_true8_pred8.png',
+    '04_idx3_true7_pred7.png',
+    '05_idx4_true7_pred7.png',
+    '06_idx5_true0_pred0.png',
+    '07_idx6_true6_pred6.png',
+    '08_idx7_true2_pred2.png',
+    '09_idx8_true7_pred7.png',
+    '10_idx9_true4_pred4.png',
+    '11_idx10_true3_pred3.png',
+    '12_idx11_true9_pred9.png',
+  ],
+  attacked: [
+    'rotate_attack_0_attacked_pred2_rot15deg.png',
+    'rotate_attack_1_attacked_pred2_rot15deg.png',
+    'rotate_attack_2_attacked_pred2_rot-10deg.png',
+    'rotate_attack_3_attacked_pred5_rot15deg.png',
+    'rotate_attack_4_attacked_pred2_rot-15deg.png',
+  ],
+};
+
+// Image lists for shift attack challenge
+const SHIFT_ATTACK_IMAGES = {
+  original: [
+    '01_idx0_true8_pred8.png',
+    '02_idx1_true4_pred4.png',
+    '03_idx2_true8_pred8.png',
+    '04_idx3_true7_pred7.png',
+    '05_idx4_true7_pred7.png',
+    '06_idx5_true0_pred0.png',
+    '07_idx6_true6_pred6.png',
+    '08_idx7_true2_pred2.png',
+    '09_idx8_true7_pred7.png',
+    '10_idx9_true4_pred4.png',
+    '11_idx10_true3_pred3.png',
+    '12_idx11_true9_pred9.png',
+  ],
+  attacked: [
+    'shift_attack_0_attacked_pred2_dx-5_dy-4.png',
+    'shift_attack_1_attacked_pred8_dx-5_dy-3.png',
+    'shift_attack_2_attacked_pred2_dx-3_dy5.png',
+    'shift_attack_3_attacked_pred2_dx-1_dy-3.png',
+    'shift_attack_4_attacked_pred2_dx2_dy-5.png',
+  ],
+};
+
 interface ImageItem {
   id: string;
   src: string;
@@ -70,9 +120,30 @@ const shuffleArray = <T,>(array: T[]): T[] => {
   return shuffled;
 };
 
-const randomizeImages = (): ImageItem[] => {
-  const shuffledOriginal = shuffleArray(PIXEL_ATTACK_IMAGES.original).slice(0, 3);
-  const shuffledAttacked = shuffleArray(PIXEL_ATTACK_IMAGES.attacked).slice(0, 3);
+const randomizeImages = (challengeId: number): ImageItem[] => {
+  let imageSet;
+  let attackPath;
+
+  switch (challengeId) {
+    case 1:
+      imageSet = PIXEL_ATTACK_IMAGES;
+      attackPath = 'pixel_attack';
+      break;
+    case 2:
+      imageSet = ROTATE_ATTACK_IMAGES;
+      attackPath = 'rotate';
+      break;
+    case 3:
+      imageSet = SHIFT_ATTACK_IMAGES;
+      attackPath = 'shift_attack';
+      break;
+    default:
+      imageSet = PIXEL_ATTACK_IMAGES;
+      attackPath = 'pixel_attack';
+  }
+
+  const shuffledOriginal = shuffleArray(imageSet.original).slice(0, 3);
+  const shuffledAttacked = shuffleArray(imageSet.attacked).slice(0, 3);
 
   const images: ImageItem[] = [
     ...shuffledOriginal.map((filename) => ({
@@ -82,7 +153,7 @@ const randomizeImages = (): ImageItem[] => {
     })),
     ...shuffledAttacked.map((filename) => ({
       id: `attacked_${filename}`,
-      src: `/cnn/pixel_attack/successful_attacks/${filename}`,
+      src: `/cnn/${attackPath}/successful_attacks/${filename}`,
       isAttacked: true,
     })),
   ];
@@ -105,8 +176,8 @@ export function MainGame() {
 
   // Initialize images when challenge is selected
   useEffect(() => {
-    if (selectedChallenge === 1) {
-      setImagePool(randomizeImages());
+    if (selectedChallenge) {
+      setImagePool(randomizeImages(selectedChallenge));
     }
   }, [selectedChallenge]);
 
@@ -133,7 +204,9 @@ export function MainGame() {
     setSelectedImageIds([]);
     setRevealed(false);
     // Randomize images again
-    setImagePool(randomizeImages());
+    if (selectedChallenge) {
+      setImagePool(randomizeImages(selectedChallenge));
+    }
   };
 
   return (
@@ -291,9 +364,27 @@ export function MainGame() {
                       <div className="space-y-2">
                         <h4>🔴 CNN Model Weaknesses:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                          <li>Easily fooled by pixel-level perturbations</li>
-                          <li>Small imperceptible changes can cause misclassification</li>
-                          <li>Adversarial examples are a real security concern</li>
+                          {selectedChallenge === 1 && (
+                            <>
+                              <li>Easily fooled by pixel-level perturbations</li>
+                              <li>Small imperceptible changes can cause misclassification</li>
+                              <li>Adversarial examples are a real security concern</li>
+                            </>
+                          )}
+                          {selectedChallenge === 2 && (
+                            <>
+                              <li>Vulnerable to rotational transformations</li>
+                              <li>Small rotations can significantly alter predictions</li>
+                              <li>Geometric transformations exploit spatial dependencies</li>
+                            </>
+                          )}
+                          {selectedChallenge === 3 && (
+                            <>
+                              <li>Sensitive to positional shifts</li>
+                              <li>Small translations can cause misclassification</li>
+                              <li>Relies heavily on precise spatial positioning</li>
+                            </>
+                          )}
                         </ul>
                       </div>
                       {/* <div className="space-y-2">
