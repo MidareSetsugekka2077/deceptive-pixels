@@ -10,7 +10,7 @@ const CHALLENGES = [
     id: 1,
     title: 'Pixel Attack',
     description: 'Find images with altered pixels',
-    difficulty: 'Easy',
+    difficulty: 'Normal',
     hint: 'Look for a pixel that is out of place',
   },
   {
@@ -44,6 +44,11 @@ const PIXEL_ATTACK_IMAGES = {
     '10_idx9_true4_pred4.png',
     '11_idx10_true3_pred3.png',
     '12_idx11_true9_pred9.png',
+    'failed_0_true8_pred8.png',
+    'failed_1_true4_pred4.png',
+    'failed_2_true8_pred8.png',
+    'failed_3_true7_pred7.png',
+    'failed_4_true7_pred7.png',
   ],
   attacked: [
     'attack_0_attacked_pred9.png',
@@ -148,7 +153,7 @@ const randomizeImages = (challengeId: number): ImageItem[] => {
   const images: ImageItem[] = [
     ...shuffledOriginal.map((filename) => ({
       id: `original_${filename}`,
-      src: `/cnn/original/${filename}`,
+      src: filename.startsWith('failed_') ? `/cnn/pixel_attack/failed_attacks/${filename}` : `/cnn/original/${filename}`,
       isAttacked: false,
     })),
     ...shuffledAttacked.map((filename) => ({
@@ -217,7 +222,7 @@ export function MainGame() {
             <div>
               <CardTitle>Challenge: Select adversarial images that fool the model. Understand the different kinds of adversarial attacks!</CardTitle>
               <CardDescription>
-                Extra Challenge: Can you reach 100 points?
+                Extra Challenge: Can you reach 300 points?
               </CardDescription>
             </div>
               {!tutorialCompleted && (
@@ -263,7 +268,7 @@ export function MainGame() {
                         variant={
                           challenge.difficulty === 'Easy'
                             ? 'secondary'
-                            : challenge.difficulty === 'Medium'
+                            : challenge.difficulty === 'Normal'
                             ? 'default'
                             : 'destructive'
                         }
