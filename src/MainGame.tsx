@@ -15,14 +15,14 @@ const CHALLENGES = [
   },
   {
     id: 2,
-    title: 'Pixel Attack',
-    description: 'Find images with altered pixels',
+    title: 'Rotation Attack',
+    description: 'Find images with rotation',
     difficulty: 'Easy',
-    hint: 'Look for a pixel that is out of place',
+    hint: 'Look for images with greater rotation',
   },
   {
     id: 3,
-    title: 'Pixel Attack',
+    title: 'Shift Attack',
     description: 'Find images with altered pixels',
     difficulty: 'Easy',
     hint: 'Look for a pixel that is out of place',
@@ -77,12 +77,12 @@ const randomizeImages = (): ImageItem[] => {
   const images: ImageItem[] = [
     ...shuffledOriginal.map((filename) => ({
       id: `original_${filename}`,
-      src: `/cnn/pixel_attack/original/${filename}`,
+      src: `/cnn/original/${filename}`,
       isAttacked: false,
     })),
     ...shuffledAttacked.map((filename) => ({
       id: `attacked_${filename}`,
-      src: `/cnn/pixel_attack/attacked/${filename}`,
+      src: `/cnn/pixel_attack/successful_attacks/${filename}`,
       isAttacked: true,
     })),
   ];
@@ -90,7 +90,7 @@ const randomizeImages = (): ImageItem[] => {
   return shuffleArray(images);
 };
 
-export function Prototype() {
+export function MainGame() {
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(null);
   const [imagePool, setImagePool] = useState<ImageItem[]>([]);
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
@@ -163,7 +163,6 @@ export function Prototype() {
               <Trophy className="h-5 w-5 text-yellow-500" />
               <span>Current Score: <strong>{score} points</strong></span>
             </div>
-            {/* <Badge variant="secondary">Level 1</Badge> */}
           </div>
 
           {/* Challenge Selection */}

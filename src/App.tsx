@@ -1,4 +1,4 @@
-import { Prototype } from './Prototype';
+import { MainGame } from './MainGame';
 
 export default function App() {
   return (
@@ -7,7 +7,7 @@ export default function App() {
         <header className="mb-8 text-center">
           <h1 className="mb-2 text-3xl font-semibold">Deceptive Pixels</h1>
         </header>
-        <Prototype />
+        <MainGame />
       </div>
     </div>
   );
