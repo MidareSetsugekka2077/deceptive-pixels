@@ -166,8 +166,15 @@ const randomizeImages = (challengeId: number): ImageItem[] => {
   return shuffleArray(images);
 };
 
-export function MainGame() {
-  const [selectedChallenge, setSelectedChallenge] = useState<number | null>(null);
+interface MainGameProps {
+  fixedChallengeId?: number;
+  showChallengeSelection?: boolean;
+}
+
+export function MainGame({ fixedChallengeId, showChallengeSelection = true }: MainGameProps) {
+  const [selectedChallenge, setSelectedChallenge] = useState<number | null>(
+    fixedChallengeId ?? null,
+  );
   const [imagePool, setImagePool] = useState<ImageItem[]>([]);
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
   const [score, setScore] = useState(0);
@@ -178,6 +185,12 @@ export function MainGame() {
   const startTutorial = () => {
     setTutorialActive(true);
   };
+
+  useEffect(() => {
+    if (fixedChallengeId) {
+      setSelectedChallenge(fixedChallengeId);
+    }
+  }, [fixedChallengeId]);
 
   // Initialize images when challenge is selected
   useEffect(() => {
@@ -244,47 +257,49 @@ export function MainGame() {
           </div>
 
           {/* Challenge Selection */}
-          <div className="border-2 border-dashed rounded-lg p-6 bg-background">
-            <div className="flex items-center gap-2 mb-4">
-              <Target className="h-5 w-5" />
-              <h3>Select Your Challenge</h3>
+          {showChallengeSelection && !fixedChallengeId && (
+            <div className="border-2 border-dashed rounded-lg p-6 bg-background">
+              <div className="flex items-center gap-2 mb-4">
+                <Target className="h-5 w-5" />
+                <h3>Select Your Challenge</h3>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4">
+                {CHALLENGES.map((challenge) => (
+                  <Card
+                    key={challenge.id}
+                    className={`cursor-pointer transition-all ${
+                      selectedChallenge === challenge.id ? 'border-2 border-primary shadow-lg' : ''
+                    }`}
+                    onClick={() => {
+                      setSelectedChallenge(challenge.id);
+                      reset();
+                    }}
+                  >
+                    <CardHeader>
+                      <div className="flex items-start justify-between">
+                        <CardTitle className="text-base">{challenge.title}</CardTitle>
+                        <Badge
+                          variant={
+                            challenge.difficulty === 'Easy'
+                              ? 'secondary'
+                              : challenge.difficulty === 'Normal'
+                              ? 'default'
+                              : 'destructive'
+                          }
+                        >
+                          {challenge.difficulty}
+                        </Badge>
+                      </div>
+                      <CardDescription className="text-sm">{challenge.description}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <p className="text-xs text-muted-foreground italic">💡 {challenge.hint}</p>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </div>
-            <div className="grid md:grid-cols-3 gap-4">
-              {CHALLENGES.map((challenge) => (
-                <Card
-                  key={challenge.id}
-                  className={`cursor-pointer transition-all ${
-                    selectedChallenge === challenge.id ? 'border-2 border-primary shadow-lg' : ''
-                  }`}
-                  onClick={() => {
-                    setSelectedChallenge(challenge.id);
-                    reset();
-                  }}
-                >
-                  <CardHeader>
-                    <div className="flex items-start justify-between">
-                      <CardTitle className="text-base">{challenge.title}</CardTitle>
-                      <Badge
-                        variant={
-                          challenge.difficulty === 'Easy'
-                            ? 'secondary'
-                            : challenge.difficulty === 'Normal'
-                            ? 'default'
-                            : 'destructive'
-                        }
-                      >
-                        {challenge.difficulty}
-                      </Badge>
-                    </div>
-                    <CardDescription className="text-sm">{challenge.description}</CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-xs text-muted-foreground italic">💡 {challenge.hint}</p>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
+          )}
 
           {/* Image Pool */}
           {selectedChallenge && (
