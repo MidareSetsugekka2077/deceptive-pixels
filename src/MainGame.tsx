@@ -413,7 +413,7 @@ export function MainGame() {
       <Tutorial
         open={tutorialActive}
         onOpenChange={setTutorialActive}
-        onComplete={() => setTutorialCompleted(true)}
+        onComplete={() => setTutorialCompleted(false)}
       />
     </div>
   );
