@@ -4,6 +4,7 @@ import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
 import { Target, Zap, Trophy, GraduationCap } from 'lucide-react';
 import { Tutorial } from './Tutorial';
+import { Header } from './components/Header';
 
 const CHALLENGES = [
   {
@@ -229,6 +230,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
 
   return (
     <div className="space-y-6">
+      <Header />
       <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
