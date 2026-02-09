@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { Header } from './components/Header';
 
 const challengeCards = [
 	{
@@ -46,16 +47,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
 			{/* Header + constrained content */}
-			<div className="mx-auto w-full max-w-[1240px] px-10 pt-5 pb-5">
-				<div className="flex items-center gap-2">
-					<div className="flex h-[18px] w-[18px] items-center justify-center bg-white">
-						<div className="h-[10px] w-[10px] bg-[#0a0a0a]" />
-					</div>
-					<p className="text-[32px] font-medium leading-6 tracking-[-0.3125px]">
-						Deceptive Pixels
-					</p>
-				</div>
-			</div>
+			<Header />
 
 			<section className="w-full bg-[#0d2d43] px-6 pb-[123px] pt-[116px] text-center text-white">
 				<div className="mx-auto flex w-full max-w-[680px] flex-col items-center gap-[52px]">
