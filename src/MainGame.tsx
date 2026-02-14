@@ -87,9 +87,11 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   };
 
   return (
-    <div className="space-y-6">
-      <Header />
-      <Card>
+    <div className="min-h-screen p-4 md:p-6">
+      <div className="min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border-8 border-[#9c9cb2] rounded-2xl p-4 md:p-6">
+        <div className="space-y-6">
+          <Header />
+          <Card>
         <CardHeader>
           <div className="flex items-start justify-between">
             <div>
@@ -269,11 +271,13 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
       </Card>
 
       {/* Tutorial Component */}
-      <Tutorial
-        open={tutorialActive}
-        onOpenChange={setTutorialActive}
-        onComplete={() => setTutorialCompleted(false)}
-      />
+          <Tutorial
+            open={tutorialActive}
+            onOpenChange={setTutorialActive}
+            onComplete={() => setTutorialCompleted(false)}
+          />
+        </div>
+      </div>
     </div>
   );
 }
