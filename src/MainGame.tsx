@@ -5,167 +5,8 @@ import { Badge } from './components/ui/badge';
 import { Target, Zap, Trophy, GraduationCap } from 'lucide-react';
 import { Tutorial } from './Tutorial';
 import { Header } from './components/Header';
-
-const CHALLENGES = [
-  {
-    id: 1,
-    title: 'Pixel Attack',
-    description: 'Find images with altered pixels',
-    difficulty: 'Normal',
-    hint: 'Look for a pixel that is out of place',
-  },
-  {
-    id: 2,
-    title: 'Rotation Attack',
-    description: 'Find images with rotation',
-    difficulty: 'Easy',
-    hint: 'Look for images with greater rotation',
-  },
-  {
-    id: 3,
-    title: 'Shift Attack',
-    description: 'Find images with shifted numbers',
-    difficulty: 'Easy',
-    hint: 'Look for images that are closer to edges',
-  },
-];
-
-// Image lists for pixel attack challenge
-const PIXEL_ATTACK_IMAGES = {
-  original: [
-    '01_idx0_true8_pred8.png',
-    '02_idx1_true4_pred4.png',
-    '03_idx2_true8_pred8.png',
-    '04_idx3_true7_pred7.png',
-    '05_idx4_true7_pred7.png',
-    '06_idx5_true0_pred0.png',
-    '07_idx6_true6_pred6.png',
-    '08_idx7_true2_pred2.png',
-    '09_idx8_true7_pred7.png',
-    '10_idx9_true4_pred4.png',
-    '11_idx10_true3_pred3.png',
-    '12_idx11_true9_pred9.png',
-    'failed_0_true8_pred8.png',
-    'failed_1_true4_pred4.png',
-    'failed_2_true8_pred8.png',
-    'failed_3_true7_pred7.png',
-    'failed_4_true7_pred7.png',
-  ],
-  attacked: [
-    'attack_0_attacked_pred9.png',
-    'attack_1_attacked_pred2.png',
-    'attack_2_attacked_pred6.png',
-    'attack_3_attacked_pred9.png',
-    'attack_4_attacked_pred7.png',
-  ],
-};
-
-// Image lists for rotation attack challenge
-const ROTATE_ATTACK_IMAGES = {
-  original: [
-    '01_idx0_true8_pred8.png',
-    '02_idx1_true4_pred4.png',
-    '03_idx2_true8_pred8.png',
-    '04_idx3_true7_pred7.png',
-    '05_idx4_true7_pred7.png',
-    '06_idx5_true0_pred0.png',
-    '07_idx6_true6_pred6.png',
-    '08_idx7_true2_pred2.png',
-    '09_idx8_true7_pred7.png',
-    '10_idx9_true4_pred4.png',
-    '11_idx10_true3_pred3.png',
-    '12_idx11_true9_pred9.png',
-  ],
-  attacked: [
-    'rotate_attack_0_attacked_pred2_rot15deg.png',
-    'rotate_attack_1_attacked_pred2_rot15deg.png',
-    'rotate_attack_2_attacked_pred2_rot-10deg.png',
-    'rotate_attack_3_attacked_pred5_rot15deg.png',
-    'rotate_attack_4_attacked_pred2_rot-15deg.png',
-  ],
-};
-
-// Image lists for shift attack challenge
-const SHIFT_ATTACK_IMAGES = {
-  original: [
-    '01_idx0_true8_pred8.png',
-    '02_idx1_true4_pred4.png',
-    '03_idx2_true8_pred8.png',
-    '04_idx3_true7_pred7.png',
-    '05_idx4_true7_pred7.png',
-    '06_idx5_true0_pred0.png',
-    '07_idx6_true6_pred6.png',
-    '08_idx7_true2_pred2.png',
-    '09_idx8_true7_pred7.png',
-    '10_idx9_true4_pred4.png',
-    '11_idx10_true3_pred3.png',
-    '12_idx11_true9_pred9.png',
-  ],
-  attacked: [
-    'shift_attack_0_attacked_pred2_dx-5_dy-4.png',
-    'shift_attack_1_attacked_pred8_dx-5_dy-3.png',
-    'shift_attack_2_attacked_pred2_dx-3_dy5.png',
-    'shift_attack_3_attacked_pred2_dx-1_dy-3.png',
-    'shift_attack_4_attacked_pred2_dx2_dy-5.png',
-  ],
-};
-
-interface ImageItem {
-  id: string;
-  src: string;
-  isAttacked: boolean;
-}
-
-// Utility functions
-const shuffleArray = <T,>(array: T[]): T[] => {
-  const shuffled = [...array];
-  for (let i = shuffled.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-  }
-  return shuffled;
-};
-
-const randomizeImages = (challengeId: number): ImageItem[] => {
-  let imageSet;
-  let attackPath;
-
-  switch (challengeId) {
-    case 1:
-      imageSet = PIXEL_ATTACK_IMAGES;
-      attackPath = 'pixel_attack';
-      break;
-    case 2:
-      imageSet = ROTATE_ATTACK_IMAGES;
-      attackPath = 'rotate';
-      break;
-    case 3:
-      imageSet = SHIFT_ATTACK_IMAGES;
-      attackPath = 'shift_attack';
-      break;
-    default:
-      imageSet = PIXEL_ATTACK_IMAGES;
-      attackPath = 'pixel_attack';
-  }
-
-  const shuffledOriginal = shuffleArray(imageSet.original).slice(0, 3);
-  const shuffledAttacked = shuffleArray(imageSet.attacked).slice(0, 3);
-
-  const images: ImageItem[] = [
-    ...shuffledOriginal.map((filename) => ({
-      id: `original_${filename}`,
-      src: filename.startsWith('failed_') ? `/cnn/pixel_attack/failed_attacks/${filename}` : `/cnn/original/${filename}`,
-      isAttacked: false,
-    })),
-    ...shuffledAttacked.map((filename) => ({
-      id: `attacked_${filename}`,
-      src: `/cnn/${attackPath}/successful_attacks/${filename}`,
-      isAttacked: true,
-    })),
-  ];
-
-  return shuffleArray(images);
-};
+import { CHALLENGES } from './config/challenges';
+import { useImages } from './hooks/useImages';
 
 interface MainGameProps {
   fixedChallengeId?: number;
@@ -176,12 +17,12 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(
     fixedChallengeId ?? null,
   );
-  const [imagePool, setImagePool] = useState<ImageItem[]>([]);
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
   const [score, setScore] = useState(0);
   const [revealed, setRevealed] = useState(false);
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
+  const { imagePool, resetImages } = useImages(selectedChallenge);
 
   const startTutorial = () => {
     setTutorialActive(true);
@@ -192,13 +33,6 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
       setSelectedChallenge(fixedChallengeId);
     }
   }, [fixedChallengeId]);
-
-  // Initialize images when challenge is selected
-  useEffect(() => {
-    if (selectedChallenge) {
-      setImagePool(randomizeImages(selectedChallenge));
-    }
-  }, [selectedChallenge]);
 
   const toggleImage = (imgId: string) => {
     if (selectedImageIds.includes(imgId)) {
@@ -222,10 +56,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   const reset = () => {
     setSelectedImageIds([]);
     setRevealed(false);
-    // Randomize images again
-    if (selectedChallenge) {
-      setImagePool(randomizeImages(selectedChallenge));
-    }
+    resetImages();
   };
 
   return (
