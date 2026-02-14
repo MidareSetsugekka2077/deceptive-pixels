@@ -21,6 +21,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   );
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
   const [score, setScore] = useState(0);
+  const [currentAttemptScore, setCurrentAttemptScore] = useState(0);
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const { imagePool, resetImages } = useImages(selectedChallenge);
@@ -44,12 +45,14 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   useEffect(() => {
     if (!selectedChallenge) {
       setScore(0);
+      setCurrentAttemptScore(0);
       return;
     }
 
     const storedScore = localStorage.getItem(getScoreStorageKey(selectedChallenge));
     const parsedScore = storedScore ? Number.parseInt(storedScore, 10) : 0;
     setScore(Number.isNaN(parsedScore) ? 0 : Math.min(parsedScore, maxChallengeScore));
+    setCurrentAttemptScore(0);
   }, [selectedChallenge]);
 
   const toggleImage = (imgId: string) => {
@@ -67,6 +70,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
       return img?.isAttacked;
     }).length;
     const points = correctCount * 10;
+    setCurrentAttemptScore(points);
     const nextScore = Math.min(Math.max(score, points), maxChallengeScore);
     setScore(nextScore);
     if (selectedChallenge) {
@@ -77,6 +81,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
 
   const reset = () => {
     setSelectedImageIds([]);
+    setCurrentAttemptScore(0);
     resetPhase();
     resetImages();
   };
@@ -104,11 +109,17 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
 
         <CardContent className="space-y-6">
           {/* Score Display */}
-          <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
+          <div className="flex items-center justify-between p-4 bg-muted rounded-lg gap-6">
             <div className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-yellow-500" />
               <span>
-                Current Score: <strong>{score}/{maxChallengeScore} points</strong>
+                Best Score: <strong>{score}/{maxChallengeScore}</strong>
+              </span>
+            </div>
+            <div className="flex items-center gap-2">
+              <Zap className="h-5 w-5 text-blue-500" />
+              <span>
+                Current Attempt: <strong>{currentAttemptScore}/{maxChallengeScore}</strong>
               </span>
             </div>
           </div>
