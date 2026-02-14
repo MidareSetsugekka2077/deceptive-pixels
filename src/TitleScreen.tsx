@@ -1,41 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
-
-const challengeCards = [
-	{
-		title: "Pixel Attack",
-		description: "Find the suspicious pixel.",
-		cardIcon: "/icons/pixel_attack.png",
-		path: "/pixel-attack",
-	},
-	{
-		title: "Rotate Attack",
-		description: "Find the rotated image.",
-		cardIcon: "/icons/rotate_attack.svg",
-		path: "/rotate-attack",
-	},
-	{
-		title: "Shift Attack",
-		description: "Find the shifted image.",
-		cardIcon: "/icons/shift_attack.svg",
-		path: "/shift-attack",
-	},
-	{
-		title: "Random Noise Attack",
-		description: "Find the noisy image.",
-		cardIcon: "/icons/noise_attack.svg",
-	},
-	{
-		title: "Blur Attack",
-		description: "Find the blurred image.",
-		cardIcon: "/icons/blur_attack.svg",
-	},
-	{
-		title: "Adversarial Patches",
-		description: "Find the misleading patch.",
-		cardIcon: "/icons/adversarial_patches.svg",
-	},
-];
+import { CHALLENGE_CARDS } from './config/challengeCards';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -78,7 +43,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 			{/* Constrained cards section */}
 			<div className="mx-auto w-full px-5 pb-16">
 					<section className="mt-11 flex w-full flex-wrap items-center justify-center gap-[25px] px-3 sm:px-[68px]">
-						{challengeCards.map((card, index) => {
+						{CHALLENGE_CARDS.map((card, index) => {
 							const isActive = Boolean(card.path);
 
 							return (
