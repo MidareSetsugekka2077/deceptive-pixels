@@ -7,6 +7,7 @@ import { Tutorial } from './Tutorial';
 import { Header } from './components/Header';
 import { CHALLENGES } from './config/challenges';
 import { useImages } from './hooks/useImages';
+import { useGameState } from './hooks/useGameState';
 
 interface MainGameProps {
   fixedChallengeId?: number;
@@ -19,10 +20,13 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   );
   const [selectedImageIds, setSelectedImageIds] = useState<string[]>([]);
   const [score, setScore] = useState(0);
-  const [revealed, setRevealed] = useState(false);
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
   const { imagePool, resetImages } = useImages(selectedChallenge);
+  const { revealed, reveal, resetPhase } = useGameState();
+  const selectedChallengeConfig = selectedChallenge
+    ? CHALLENGES.find((challenge) => challenge.id === selectedChallenge)
+    : null;
 
   const startTutorial = () => {
     setTutorialActive(true);
@@ -50,12 +54,12 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
     }).length;
     const points = correctCount * 10;
     setScore(score + points);
-    setRevealed(true);
+    reveal();
   };
 
   const reset = () => {
     setSelectedImageIds([]);
-    setRevealed(false);
+    resetPhase();
     resetImages();
   };
 
@@ -112,13 +116,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
                       <div className="flex items-start justify-between">
                         <CardTitle className="text-base">{challenge.title}</CardTitle>
                         <Badge
-                          variant={
-                            challenge.difficulty === 'Easy'
-                              ? 'secondary'
-                              : challenge.difficulty === 'Normal'
-                              ? 'default'
-                              : 'destructive'
-                          }
+                          variant={challenge.badgeVariant}
                         >
                           {challenge.difficulty}
                         </Badge>
@@ -217,27 +215,9 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
                       <div className="space-y-2">
                         <h4>🔴 CNN Model Weaknesses:</h4>
                         <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                          {selectedChallenge === 1 && (
-                            <>
-                              <li>Easily fooled by pixel-level perturbations</li>
-                              <li>Small imperceptible changes can cause misclassification</li>
-                              <li>Adversarial examples are a real security concern</li>
-                            </>
-                          )}
-                          {selectedChallenge === 2 && (
-                            <>
-                              <li>Vulnerable to rotational transformations</li>
-                              <li>Small rotations can significantly alter predictions</li>
-                              <li>Geometric transformations exploit spatial dependencies</li>
-                            </>
-                          )}
-                          {selectedChallenge === 3 && (
-                            <>
-                              <li>Sensitive to positional shifts</li>
-                              <li>Small translations can cause misclassification</li>
-                              <li>Relies heavily on precise spatial positioning</li>
-                            </>
-                          )}
+                          {(selectedChallengeConfig?.weaknesses ?? []).map((weakness) => (
+                            <li key={weakness}>{weakness}</li>
+                          ))}
                         </ul>
                       </div>
                       {/* <div className="space-y-2">
