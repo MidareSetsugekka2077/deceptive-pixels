@@ -15,6 +15,7 @@ interface MainGameProps {
 }
 
 export function MainGame({ fixedChallengeId, showChallengeSelection = true }: MainGameProps) {
+  const maxChallengeScore = 30;
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(
     fixedChallengeId ?? null,
   );
@@ -32,11 +33,24 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
     setTutorialActive(true);
   };
 
+  const getScoreStorageKey = (challengeId: number) => `challengeScore:${challengeId}`;
+
   useEffect(() => {
     if (fixedChallengeId) {
       setSelectedChallenge(fixedChallengeId);
     }
   }, [fixedChallengeId]);
+
+  useEffect(() => {
+    if (!selectedChallenge) {
+      setScore(0);
+      return;
+    }
+
+    const storedScore = localStorage.getItem(getScoreStorageKey(selectedChallenge));
+    const parsedScore = storedScore ? Number.parseInt(storedScore, 10) : 0;
+    setScore(Number.isNaN(parsedScore) ? 0 : Math.min(parsedScore, maxChallengeScore));
+  }, [selectedChallenge]);
 
   const toggleImage = (imgId: string) => {
     if (selectedImageIds.includes(imgId)) {
@@ -53,7 +67,11 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
       return img?.isAttacked;
     }).length;
     const points = correctCount * 10;
-    setScore(score + points);
+    const nextScore = Math.min(Math.max(score, points), maxChallengeScore);
+    setScore(nextScore);
+    if (selectedChallenge) {
+      localStorage.setItem(getScoreStorageKey(selectedChallenge), String(nextScore));
+    }
     reveal();
   };
 
@@ -89,7 +107,9 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
           <div className="flex items-center justify-between p-4 bg-muted rounded-lg">
             <div className="flex items-center gap-2">
               <Trophy className="h-5 w-5 text-yellow-500" />
-              <span>Current Score: <strong>{score} points</strong></span>
+              <span>
+                Current Score: <strong>{score}/{maxChallengeScore} points</strong>
+              </span>
             </div>
           </div>
 
