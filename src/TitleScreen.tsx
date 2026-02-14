@@ -66,7 +66,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 						by finding the images that can trick the image classifier!
 					</p>
 					<button
-						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-bold leading-6 tracking-[-0.3125px] text-black"
+						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-bold leading-6 tracking-[-0.3125px] text-black transition-colors duration-200 hover:bg-[#e7cf00]"
 						onClick={onPlay}
 						type="button"
 					>
