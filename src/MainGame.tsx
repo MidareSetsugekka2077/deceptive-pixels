@@ -89,13 +89,12 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
 
   return (
     <div className="min-h-screen p-4 md:p-6">
-      <div className="min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border-8 border-[#9c9cb2] rounded-2xl p-4 md:p-6">
-        <div className="space-y-6 bg-[#cad1d7] rounded-2xl">
+      <div className="min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border-8 border-[#9c9cb2] rounded-xl p-4 md:p-6">
+        <div className="bg-[#cad1d7] rounded-2xl">
           <Header
             rightContent={
               challengeLabel ? (
                 <div className="flex items-center gap-2 text-xl text-muted-foreground">
-                  <span className="hidden sm:inline">Challenge</span>
                   <Badge variant="outline" className="border-[#0d2d43] border-2 text-xl">{challengeLabel}</Badge>
                 </div>
               ) : null
