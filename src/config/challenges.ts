@@ -48,4 +48,43 @@ export const CHALLENGES: ChallengeConfig[] = [
       'Relies heavily on precise spatial positioning',
     ],
   },
+  {
+    id: 4,
+    title: 'Random Noise Attack',
+    description: 'Find images with noisy pixels',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for images that feel noisy with many altered pixels',
+    weaknesses: [
+      'Environments are often noisy and CNNs are not always trained to classify noisy images',
+      'Perceptible changes can also cause misclassification',
+      'Adversarial examples are a real security concern',
+    ],
+  },
+  {
+    id: 5,
+    title: 'Blur Attack',
+    description: 'Find blurred images',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for images that are more blurry than others',
+    weaknesses: [
+      'CNNs cannot recognise blurry images if they were not trained to do so',
+      'Blurred images alters almost all pixels which is an unexpected input',
+      'Even a slight blur can be very effective in fooling CNNs',
+    ],
+  },
+  {
+    id: 6,
+    title: 'Adversarial Patches',
+    description: 'Find images with a weird patch',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for images that have a weird looking sticker',
+    weaknesses: [
+      'Very effective against CNNs',
+      'The same adversarial patch can cause most CNNs to misclassify',
+      'Does not require prior knowledge of original image to attack successfully',
+    ],
+  },
 ];
