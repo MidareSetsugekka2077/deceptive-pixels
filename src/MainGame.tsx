@@ -6,15 +6,22 @@ import { Target, Zap, Trophy, GraduationCap } from 'lucide-react';
 import { Tutorial } from './Tutorial';
 import { Header } from './components/Header';
 import { CHALLENGES } from './config/challenges';
+import type { DatasetKey } from './config/images';
 import { useImages } from './hooks/useImages';
 import { useGameState } from './hooks/useGameState';
+import { getStoredScore, setStoredScore } from './utils/challengeScore';
 
 interface MainGameProps {
   fixedChallengeId?: number;
   showChallengeSelection?: boolean;
+  dataset?: DatasetKey;
 }
 
-export function MainGame({ fixedChallengeId, showChallengeSelection = true }: MainGameProps) {
+export function MainGame({
+  fixedChallengeId,
+  showChallengeSelection = true,
+  dataset = 'mnist',
+}: MainGameProps) {
   const maxChallengeScore = 30;
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(
     fixedChallengeId ?? null,
@@ -24,7 +31,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   const [currentAttemptScore, setCurrentAttemptScore] = useState(0);
   const [tutorialActive, setTutorialActive] = useState(false);
   const [tutorialCompleted, setTutorialCompleted] = useState(false);
-  const { imagePool, resetImages } = useImages(selectedChallenge);
+  const { imagePool, resetImages } = useImages(selectedChallenge, dataset);
   const { revealed, reveal, resetPhase } = useGameState();
   const selectedChallengeConfig = selectedChallenge
     ? CHALLENGES.find((challenge) => challenge.id === selectedChallenge)
@@ -34,8 +41,6 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
   const startTutorial = () => {
     setTutorialActive(true);
   };
-
-  const getScoreStorageKey = (challengeId: number) => `challengeScore:${challengeId}`;
 
   useEffect(() => {
     if (fixedChallengeId) {
@@ -50,11 +55,9 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
       return;
     }
 
-    const storedScore = localStorage.getItem(getScoreStorageKey(selectedChallenge));
-    const parsedScore = storedScore ? Number.parseInt(storedScore, 10) : 0;
-    setScore(Number.isNaN(parsedScore) ? 0 : Math.min(parsedScore, maxChallengeScore));
+    setScore(getStoredScore(selectedChallenge, dataset, maxChallengeScore));
     setCurrentAttemptScore(0);
-  }, [selectedChallenge]);
+  }, [selectedChallenge, dataset]);
 
   const toggleImage = (imgId: string) => {
     if (selectedImageIds.includes(imgId)) {
@@ -75,7 +78,7 @@ export function MainGame({ fixedChallengeId, showChallengeSelection = true }: Ma
     const nextScore = Math.min(Math.max(score, points), maxChallengeScore);
     setScore(nextScore);
     if (selectedChallenge) {
-      localStorage.setItem(getScoreStorageKey(selectedChallenge), String(nextScore));
+      setStoredScore(selectedChallenge, dataset, nextScore);
     }
     reveal();
   };

@@ -1,6 +1,9 @@
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
-import { CHALLENGE_CARDS } from './config/challengeCards';
+import { ImageSetSelection } from './ImageSetSelection';
+import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
+import { getStoredScore } from './utils/challengeScore';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -8,6 +11,20 @@ interface TitleScreenProps {
 
 export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const navigate = useNavigate();
+	const maxChallengeScore = 30;
+	const [datasetDialogOpen, setDatasetDialogOpen] = useState(false);
+	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
+
+	const datasetScores = useMemo(() => {
+		if (!activeCard) {
+			return { mnist: 0, imagenet: 0, max: maxChallengeScore };
+		}
+		return {
+			mnist: getStoredScore(activeCard.challengeId, 'mnist', maxChallengeScore),
+			imagenet: getStoredScore(activeCard.challengeId, 'imagenet', maxChallengeScore),
+			max: maxChallengeScore,
+		};
+	}, [activeCard, maxChallengeScore, datasetDialogOpen]);
 
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
@@ -53,9 +70,11 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 										isActive ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg' : 'cursor-not-allowed opacity-70'
 									}`}
 									onClick={() => {
-										if (card.path) {
-											navigate(card.path);
+										if (!card.path) {
+											return;
 										}
+										setActiveCard(card);
+										setDatasetDialogOpen(true);
 									}}
 									role={isActive ? 'button' : undefined}
 									aria-disabled={!isActive}
@@ -80,6 +99,24 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 						})}
 					</section>
 			</div>
+
+			<ImageSetSelection
+				open={datasetDialogOpen}
+				onOpenChange={(open) => {
+					setDatasetDialogOpen(open);
+					if (!open) {
+						setActiveCard(null);
+					}
+				}}
+				scores={datasetScores}
+				onSelect={(dataset) => {
+					if (!activeCard?.path) {
+						return;
+					}
+					setDatasetDialogOpen(false);
+					navigate(`${activeCard.path}?dataset=${dataset}`);
+				}}
+			/>
 		</div>
 	);
 }
