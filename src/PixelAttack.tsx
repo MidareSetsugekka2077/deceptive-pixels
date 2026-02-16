@@ -1,5 +1,11 @@
 import { MainGame } from './MainGame';
+import { useSearchParams } from 'react-router-dom';
 
 export function PixelAttack() {
-  return <MainGame fixedChallengeId={1} showChallengeSelection={false} />;
+  const [searchParams] = useSearchParams();
+  const dataset = searchParams.get('dataset') === 'imagenet' ? 'imagenet' : 'mnist';
+
+  return (
+    <MainGame fixedChallengeId={1} showChallengeSelection={false} dataset={dataset} />
+  );
 }
