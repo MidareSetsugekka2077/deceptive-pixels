@@ -3,6 +3,8 @@ export interface ChallengeImageSet {
   attacked: string[];
 }
 
+export type DatasetKey = 'mnist' | 'imagenet';
+
 // Image lists for pixel attack challenge
 export const PIXEL_ATTACK_IMAGES: ChallengeImageSet = {
   original: [
