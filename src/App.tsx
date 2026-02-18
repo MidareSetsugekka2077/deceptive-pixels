@@ -4,6 +4,9 @@ import { TitleScreen } from './TitleScreen';
 import { PixelAttack } from './PixelAttack';
 import { RotateAttack } from './RotateAttack';
 import { ShiftAttack } from './ShiftAttack';
+import { NoiseAttack } from './NoiseAttack';
+import { BlurAttack } from './BlurAttack';
+import { AdversarialPatches } from './AdversarialPatches';
 
 export default function App() {
   const navigate = useNavigate();
@@ -22,6 +25,9 @@ export default function App() {
       <Route path="/pixel-attack" element={<PixelAttack />} />
       <Route path="/rotate-attack" element={<RotateAttack />} />
       <Route path="/shift-attack" element={<ShiftAttack />} />
+      <Route path="/random-noise-attack" element={<NoiseAttack />} />
+      <Route path="/blur-attack" element={<BlurAttack />} />
+      <Route path="/adversarial-patches" element={<AdversarialPatches />} />
     </Routes>
   );
 }
