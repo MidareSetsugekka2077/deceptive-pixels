@@ -33,17 +33,20 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		description: 'Find the noisy image.',
 		cardIcon: '/icons/noise_attack.svg',
 		challengeId: 4,
+		path: '/random-noise-attack',
 	},
 	{
 		title: 'Blur Attack',
 		description: 'Find the blurred image.',
 		cardIcon: '/icons/blur_attack.svg',
 		challengeId: 5,
+		path: '/blur-attack',
 	},
 	{
 		title: 'Adversarial Patches',
 		description: 'Find the misleading patch.',
 		cardIcon: '/icons/adversarial_patches.svg',
 		challengeId: 6,
+		path: '/adversarial-patches',
 	},
 ];
