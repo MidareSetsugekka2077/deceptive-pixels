@@ -9,7 +9,7 @@ import { CHALLENGES } from './config/challenges';
 import type { DatasetKey } from './config/images';
 import { useImages } from './hooks/useImages';
 import { useGameState } from './hooks/useGameState';
-import { getStoredScore, setStoredScore } from './utils/challengeScore';
+import { getStoredScore, setStoredScore } from './legacy/challengeScore';
 
 interface MainGameProps {
   fixedChallengeId?: number;

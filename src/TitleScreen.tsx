@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ImageSetSelection } from './ImageSetSelection';
 import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
-import { getStoredScore } from './utils/challengeScore';
+import { getStoredScore } from './legacy/challengeScore';
 
 interface TitleScreenProps {
 	onPlay: () => void;
