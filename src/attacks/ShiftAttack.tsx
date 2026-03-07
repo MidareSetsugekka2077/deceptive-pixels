@@ -1,4 +1,4 @@
-import { MainGame } from './MainGame';
+import { MainGame } from '../MainGame';
 import { useSearchParams } from 'react-router-dom';
 
 export function ShiftAttack() {
