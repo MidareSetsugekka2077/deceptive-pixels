@@ -1,6 +1,7 @@
 import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
+import { ChallengeInfoDialog } from './components/ChallengeInfoDialog';
 import { ImageSetSelection } from './ImageSetSelection';
 import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
 import { getStoredScore } from './legacy/challengeScore';
@@ -13,6 +14,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const navigate = useNavigate();
 	const maxChallengeScore = 30;
 	const [datasetDialogOpen, setDatasetDialogOpen] = useState(false);
+	const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
 
 	const datasetScores = useMemo(() => {
@@ -79,6 +81,18 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 									role={isActive ? 'button' : undefined}
 									aria-disabled={!isActive}
 								>
+									<button
+										className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#0a0a0a] text-[20px] font-bold leading-none text-[#0a0a0a] transition-colors hover:bg-[#0a0a0a] hover:text-white"
+										onClick={(event) => {
+											event.stopPropagation();
+											setActiveCard(card);
+											setDetailsDialogOpen(true);
+										}}
+										type="button"
+										aria-label={`About ${card.title}`}
+									>
+										?
+									</button>
 									{card.cardIcon && (
 										<div className="mb-6 flex h-[24px] w-[24px] items-center justify-center">
 											<img alt="" className="h-full w-full" src={card.cardIcon} />
@@ -100,11 +114,22 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					</section>
 			</div>
 
+			<ChallengeInfoDialog
+				open={detailsDialogOpen}
+				onOpenChange={(open) => {
+					setDetailsDialogOpen(open);
+					if (!open && !datasetDialogOpen) {
+						setActiveCard(null);
+					}
+				}}
+				card={activeCard}
+			/>
+
 			<ImageSetSelection
 				open={datasetDialogOpen}
 				onOpenChange={(open) => {
 					setDatasetDialogOpen(open);
-					if (!open) {
+					if (!open && !detailsDialogOpen) {
 						setActiveCard(null);
 					}
 				}}
