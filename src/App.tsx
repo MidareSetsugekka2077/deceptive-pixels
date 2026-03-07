@@ -1,12 +1,12 @@
 import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 import { TitleScreen } from './TitleScreen';
-import { PixelAttack } from './PixelAttack';
-import { RotateAttack } from './RotateAttack';
-import { ShiftAttack } from './ShiftAttack';
-import { NoiseAttack } from './NoiseAttack';
-import { BlurAttack } from './BlurAttack';
-import { AdversarialPatches } from './AdversarialPatches';
+import { PixelAttack } from './attacks/PixelAttack';
+import { RotateAttack } from './attacks/RotateAttack';
+import { ShiftAttack } from './attacks/ShiftAttack';
+import { NoiseAttack } from './attacks/NoiseAttack';
+import { BlurAttack } from './attacks/BlurAttack';
+import { AdversarialPatches } from './attacks/AdversarialPatches';
 
 export default function App() {
   const navigate = useNavigate();
