@@ -9,7 +9,11 @@ import { CHALLENGES } from './config/challenges';
 import type { DatasetKey } from './config/images';
 import { useImages } from './hooks/useImages';
 import { useGameState } from './hooks/useGameState';
-import { getStoredScore, setStoredScore } from './legacy/challengeScore';
+import {
+  getStoredScore,
+  setFoundAttackedImages,
+  setStoredScore,
+} from './legacy/challengeScore';
 
 interface MainGameProps {
   fixedChallengeId?: number;
@@ -68,17 +72,23 @@ export function MainGame({
   };
 
   const submitGuess = () => {
-    // Calculate points based on correct answers
-    const correctCount = selectedImageIds.filter((id) => {
+    // Calculate points based on correct answers.
+    const correctlySelectedAttackedIds = selectedImageIds.filter((id) => {
       const img = imagePool.find((i) => i.id === id);
       return img?.isAttacked;
-    }).length;
+    });
+    const correctCount = correctlySelectedAttackedIds.length;
     const points = correctCount * 10;
     setCurrentAttemptScore(points);
     const nextScore = Math.min(Math.max(score, points), maxChallengeScore);
     setScore(nextScore);
     if (selectedChallenge) {
       setStoredScore(selectedChallenge, dataset, nextScore);
+      setFoundAttackedImages(
+        selectedChallenge,
+        dataset,
+        correctlySelectedAttackedIds,
+      );
     }
     reveal();
   };
