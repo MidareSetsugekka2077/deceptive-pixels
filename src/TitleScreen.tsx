@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ChallengeInfoDialog } from './components/ChallengeInfoDialog';
 import { ImageSetSelection } from './ImageSetSelection';
+import { Tutorial } from './Tutorial';
 import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
 import { getStoredScore } from './legacy/challengeScore';
 
@@ -15,6 +16,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const maxChallengeScore = 30;
 	const [datasetDialogOpen, setDatasetDialogOpen] = useState(false);
 	const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
+	const [tutorialOpen, setTutorialOpen] = useState(false);
 	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
 
 	const datasetScores = useMemo(() => {
@@ -50,11 +52,18 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 						by finding the images that can trick the image classifier!
 					</p>
 					<button
-						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-bold leading-6 tracking-[-0.3125px] text-black transition-colors duration-200 hover:bg-[#e7cf00]"
+						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-extrabold leading-6 tracking-[-0.3125px] text-black transition-colors duration-200 hover:bg-[#e7cf00]"
 						onClick={onPlay}
 						type="button"
 					>
 						Play
+					</button>
+					<button
+						className="rounded-[5px] border-2 border-white px-[40px] py-[16px] text-[24px] font-semibold leading-3 tracking-[-0.3125px] text-white transition-colors duration-200 hover:bg-white hover:text-[#0d2d43]"
+						onClick={() => setTutorialOpen(true)}
+						type="button"
+					>
+						Tutorial
 					</button>
 				</div>
 			</section>
@@ -141,6 +150,12 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					setDatasetDialogOpen(false);
 					navigate(`${activeCard.path}?dataset=${dataset}`);
 				}}
+			/>
+
+			<Tutorial
+				open={tutorialOpen}
+				onOpenChange={setTutorialOpen}
+				onComplete={onPlay}
 			/>
 		</div>
 	);
