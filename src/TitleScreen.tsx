@@ -6,7 +6,13 @@ import { ResetScoresDialog } from './components/ResetScoresDialog';
 import { ImageSetSelection } from './ImageSetSelection';
 import { Tutorial } from './Tutorial';
 import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
-import { getStoredScore, resetAllStoredScores } from './legacy/challengeScore';
+import type { DatasetKey } from './config/images';
+import {
+	getFoundAttackedImageCount,
+	getStoredScore,
+	getTotalTrackableAttackedImages,
+	resetAllStoredScores,
+} from './legacy/challengeScore';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -20,6 +26,8 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const [tutorialOpen, setTutorialOpen] = useState(false);
 	const [resetDialogOpen, setResetDialogOpen] = useState(false);
 	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
+	const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null);
+	const [pinnedBadgeId, setPinnedBadgeId] = useState<string | null>(null);
 
 	const datasetScores = useMemo(() => {
 		if (!activeCard) {
@@ -31,6 +39,12 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 			max: maxChallengeScore,
 		};
 	}, [activeCard, maxChallengeScore, datasetDialogOpen]);
+
+	const unlockDatasets: { key: DatasetKey; label: string }[] = [
+		{ key: 'mnist', label: 'MNIST' },
+		{ key: 'imagenet', label: 'ImageNet' },
+	];
+	const badgeTargetCount = 10;
 
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
@@ -82,6 +96,23 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					<section className="mt-11 flex w-full flex-wrap items-center justify-center gap-[25px] px-3 sm:px-[68px]">
 						{CHALLENGE_CARDS.map((card, index) => {
 							const isActive = Boolean(card.path);
+							const datasetUnlocks = unlockDatasets.map((dataset) => {
+								const foundCount = getFoundAttackedImageCount(
+									card.challengeId,
+									dataset.key,
+								);
+								const totalCount = getTotalTrackableAttackedImages(
+									card.challengeId,
+									dataset.key,
+								);
+
+								return {
+									...dataset,
+									foundCount,
+									totalCount,
+									unlocked: totalCount > 0 && foundCount >= totalCount,
+								};
+							});
 
 							return (
 								<div
@@ -126,6 +157,50 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 											{card.description}
 										</p>
 									)}
+									<div className="mt-auto flex w-full items-center justify-center gap-[28px] pt-8">
+										{datasetUnlocks.map((dataset) => {
+											const badgeId = `${card.challengeId}-${dataset.key}`;
+											const showTooltip =
+												hoveredBadgeId === badgeId || pinnedBadgeId === badgeId;
+											const clampedFoundCount = Math.min(
+												dataset.foundCount,
+												badgeTargetCount,
+											);
+
+											return (
+												<div
+													key={badgeId}
+													className="relative"
+												>
+													<button
+														type="button"
+														onClick={(event) => {
+															event.stopPropagation();
+															setPinnedBadgeId((prev) => (prev === badgeId ? null : badgeId));
+														}}
+														onMouseEnter={() => setHoveredBadgeId(badgeId)}
+														onMouseLeave={() => setHoveredBadgeId((prev) => (prev === badgeId ? null : prev))}
+														onFocus={() => setHoveredBadgeId(badgeId)}
+														onBlur={() => setHoveredBadgeId((prev) => (prev === badgeId ? null : prev))}
+														className={`h-[35px] w-[35px] rounded-[10px] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#0d2d43] ${dataset.unlocked ? 'bg-[#ffe600]' : 'bg-[#40404a]'}`}
+														aria-label={`${dataset.label} progress ${clampedFoundCount}/${badgeTargetCount}`}
+													>
+														<span className="sr-only">
+															{dataset.label} {clampedFoundCount} of {badgeTargetCount} found
+														</span>
+													</button>
+													{showTooltip && (
+														<div className="pointer-events-none absolute bottom-[calc(100%+10px)] left-1/2 z-20 -translate-x-1/2">
+															<div className="whitespace-nowrap rounded-[12px] bg-[#0d2d43] px-3 py-2 text-[14px] font-semibold text-white shadow-lg">
+																{clampedFoundCount}/{badgeTargetCount}
+															</div>
+															<div className="mx-auto h-0 w-0 border-l-[7px] border-r-[7px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#0d2d43]" />
+														</div>
+													)}
+												</div>
+											);
+										})}
+									</div>
 								</div>
 							);
 						})}
