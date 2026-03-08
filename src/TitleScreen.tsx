@@ -2,10 +2,11 @@ import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ChallengeInfoDialog } from './components/ChallengeInfoDialog';
+import { ResetScoresDialog } from './components/ResetScoresDialog';
 import { ImageSetSelection } from './ImageSetSelection';
 import { Tutorial } from './Tutorial';
 import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
-import { getStoredScore } from './legacy/challengeScore';
+import { getStoredScore, resetAllStoredScores } from './legacy/challengeScore';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -17,6 +18,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const [datasetDialogOpen, setDatasetDialogOpen] = useState(false);
 	const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 	const [tutorialOpen, setTutorialOpen] = useState(false);
+	const [resetDialogOpen, setResetDialogOpen] = useState(false);
 	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
 
 	const datasetScores = useMemo(() => {
@@ -35,7 +37,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 			{/* Header + constrained content */}
 			<Header />
 
-			<section className="w-full bg-[#0d2d43] px-6 pb-[123px] pt-[116px] text-center text-white">
+			<section className="w-full bg-[#0d2d43] px-6 pb-[90px] pt-[90px] text-center text-white">
 				<div className="mx-auto flex w-full max-w-[680px] flex-col items-center gap-[52px]">
 					<div className="flex h-[120px] w-[120px] items-center justify-center bg-white">
 						<div className="h-[10px] w-[10px] bg-[#0a0a0a]" />
@@ -64,6 +66,13 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 						type="button"
 					>
 						Tutorial
+					</button>
+					<button
+						className="rounded-[5px] border-2 border-[#ff8f8f] px-[26px] py-[12px] text-[18px] font-semibold leading-3 tracking-[-0.3125px] text-[#ffd7d7] transition-colors duration-200 hover:bg-[#ff8f8f] hover:text-[#0d2d43]"
+						onClick={() => setResetDialogOpen(true)}
+						type="button"
+					>
+						Reset Scores
 					</button>
 				</div>
 			</section>
@@ -156,6 +165,15 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 				open={tutorialOpen}
 				onOpenChange={setTutorialOpen}
 				onComplete={onPlay}
+			/>
+
+			<ResetScoresDialog
+				open={resetDialogOpen}
+				onOpenChange={setResetDialogOpen}
+				onConfirmReset={() => {
+					resetAllStoredScores();
+					setResetDialogOpen(false);
+				}}
 			/>
 		</div>
 	);

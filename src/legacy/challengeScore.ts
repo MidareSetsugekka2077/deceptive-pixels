@@ -43,3 +43,22 @@ export const setStoredScore = (
     localStorage.setItem(`${LEGACY_PREFIX}${challengeId}`, String(score));
   }
 };
+
+export const resetAllStoredScores = () => {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  // Remove both dataset-specific and legacy challenge score keys.
+  const keysToRemove: string[] = [];
+  for (let index = 0; index < localStorage.length; index += 1) {
+    const key = localStorage.key(index);
+    if (key?.startsWith(LEGACY_PREFIX)) {
+      keysToRemove.push(key);
+    }
+  }
+
+  keysToRemove.forEach((key) => {
+    localStorage.removeItem(key);
+  });
+};
