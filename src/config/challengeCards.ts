@@ -23,7 +23,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		challengeId: 1,
 		path: '/pixel-attack',
 		attackDetails: {
-			description: 'Pixel Attack involves modifying one or more pixels in the image',
+			description: 'Pixel Attack involves modifying one or more pixels in the image.',
 			howItWorks:
 				'Changes only a tiny number of pixels in the image. For a low resolution image, it is often just one, for higher resolution images, it can be NxN pixels. Attackers can use this to push the classifier toward a wrong prediction.',
 			effectiveness:
@@ -37,7 +37,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		challengeId: 2,
 		path: '/rotate-attack',
 		attackDetails: {
-			description: 'Rotation Attack involves rotating the image by a certain amount of degrees',
+			description: 'Rotation Attack involves rotating the image by a certain amount of degrees.',
 			howItWorks:
 				'Applies small angular rotations to an input image. Even slight changes in orientation can alter feature alignment and confuse models that are not fully rotation-invariant.',
 			effectiveness:
@@ -51,7 +51,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		challengeId: 3,
 		path: '/shift-attack',
 		attackDetails: {
-			description: 'Shift Attack involves translating the image up, down, left or right by a certain amount of pixels',
+			description: 'Shift Attack involves translating the image up, down, left or right by a certain amount of pixels.',
 			howItWorks:
 				'Shifts the whole image by a few pixels horizontally or vertically. This small translation can disrupt learned spatial patterns and cause misrecognition',
 			effectiveness:
@@ -79,7 +79,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		challengeId: 5,
 		path: '/blur-attack',
 		attackDetails: {
-			description: 'Blur Attack involves applying a Gaussian blur (usually) to an image',
+			description: 'Blur Attack involves applying a Gaussian blur (usually) to an image.',
 			howItWorks:
 				'Applies blur filters that smooth out edges and high-frequency details. This removes texture cues that many classifiers depend on.',
 			effectiveness:
@@ -93,7 +93,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		challengeId: 6,
 		path: '/adversarial-patches',
 		attackDetails: {
-			description: 'Adversarial Patch Attack involves adding a specially trained patch and placing it on the image',
+			description: 'Adversarial Patch Attack involves adding a specially trained patch and placing it on the image.',
 			howItWorks:
 				'Overlays a crafted patch onto part of the image. The patch is optimized to dominate model attention and steer prediction toward a target or incorrect class.',
 			effectiveness:
