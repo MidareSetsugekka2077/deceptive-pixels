@@ -10,6 +10,10 @@ interface ImageSetSelectionProps {
 		imagenet: number;
 		max: number;
 	};
+	unlockProgress: {
+		mnist: { foundCount: number; totalCount: number; unlocked: boolean };
+		imagenet: { foundCount: number; totalCount: number; unlocked: boolean };
+	};
 }
 
 export function ImageSetSelection({
@@ -17,6 +21,7 @@ export function ImageSetSelection({
 	onOpenChange,
 	onSelect,
 	scores,
+	unlockProgress,
 }: ImageSetSelectionProps) {
 	return (
 		<Dialog open={open} onOpenChange={onOpenChange}>
@@ -28,6 +33,14 @@ export function ImageSetSelection({
 						onClick={() => onSelect('mnist')}
 						type="button"
 					>
+						<div
+							className={`h-[35px] w-[35px] rounded-[10px] ${unlockProgress.mnist.unlocked ? 'bg-[#ffe600]' : 'bg-[#40404a]'}`}
+							title={`MNIST: ${unlockProgress.mnist.foundCount}/10`}
+						>
+							<span className="sr-only">
+								MNIST {unlockProgress.mnist.foundCount}/10 found
+							</span>
+						</div>
 						<span className="text-[40px] leading-none tracking-[-0.3125px] sm:text-[64px]">
 							MNIST
 						</span>
@@ -40,6 +53,14 @@ export function ImageSetSelection({
 						onClick={() => onSelect('imagenet')}
 						type="button"
 					>
+						<div
+							className={`h-[35px] w-[35px] rounded-[10px] ${unlockProgress.imagenet.unlocked ? 'bg-[#ffe600]' : 'bg-[#40404a]'}`}
+							title={`ImageNet: ${unlockProgress.imagenet.foundCount}/10`}
+						>
+							<span className="sr-only">
+								ImageNet {unlockProgress.imagenet.foundCount}/10 found
+							</span>
+						</div>
 						<span className="text-[40px] leading-none tracking-[-0.3125px] sm:text-[64px]">
 							ImageNet
 						</span>

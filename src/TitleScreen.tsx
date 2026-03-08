@@ -28,6 +28,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
 	const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null);
 	const [pinnedBadgeId, setPinnedBadgeId] = useState<string | null>(null);
+	const badgeTargetCount = 10;
 
 	const datasetScores = useMemo(() => {
 		if (!activeCard) {
@@ -40,11 +41,37 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 		};
 	}, [activeCard, maxChallengeScore, datasetDialogOpen]);
 
+	const activeCardUnlockProgress = useMemo(() => {
+		if (!activeCard) {
+			return {
+				mnist: { foundCount: 0, totalCount: badgeTargetCount, unlocked: false },
+				imagenet: { foundCount: 0, totalCount: badgeTargetCount, unlocked: false },
+			};
+		}
+
+		const mnistFound = getFoundAttackedImageCount(activeCard.challengeId, 'mnist');
+		const imagenetFound = getFoundAttackedImageCount(activeCard.challengeId, 'imagenet');
+		const mnistTotal = getTotalTrackableAttackedImages(activeCard.challengeId, 'mnist');
+		const imagenetTotal = getTotalTrackableAttackedImages(activeCard.challengeId, 'imagenet');
+
+		return {
+			mnist: {
+				foundCount: Math.min(mnistFound, badgeTargetCount),
+				totalCount: badgeTargetCount,
+				unlocked: mnistTotal > 0 && mnistFound >= mnistTotal,
+			},
+			imagenet: {
+				foundCount: Math.min(imagenetFound, badgeTargetCount),
+				totalCount: badgeTargetCount,
+				unlocked: imagenetTotal > 0 && imagenetFound >= imagenetTotal,
+			},
+		};
+	}, [activeCard, badgeTargetCount, datasetDialogOpen]);
+
 	const unlockDatasets: { key: DatasetKey; label: string }[] = [
 		{ key: 'mnist', label: 'MNIST' },
 		{ key: 'imagenet', label: 'ImageNet' },
 	];
-	const badgeTargetCount = 10;
 
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
@@ -227,6 +254,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					}
 				}}
 				scores={datasetScores}
+				unlockProgress={activeCardUnlockProgress}
 				onSelect={(dataset) => {
 					if (!activeCard?.path) {
 						return;
