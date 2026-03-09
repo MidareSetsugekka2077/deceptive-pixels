@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import type { ReactNode } from 'react';
 import {
 	getDatasetFoundAttackedImageCount,
@@ -44,6 +44,9 @@ export function Header({
 	rightContent,
 	isGameplayHeader = false,
 }: HeaderProps) {
+	const location = useLocation();
+	const isGalleryPage = location.pathname === '/gallery';
+
 	const datasetProgress = {
 		mnistFound: getDatasetFoundAttackedImageCount('mnist'),
 		imagenetFound: getDatasetFoundAttackedImageCount('imagenet'),
@@ -95,12 +98,14 @@ export function Header({
 						</Link>
 					</div>
 
-					<button
-						type="button"
-						className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
+					<Link
+						to="/gallery"
+						className={`px-2 py-1 text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px] ${
+							isGalleryPage ? 'bg-[rgba(174,174,174,0.65)]' : ''
+						}`}
 					>
 						Gallery
-					</button>
+					</Link>
 					<button
 						type="button"
 						className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
