@@ -1,20 +1,25 @@
 import { useState } from 'react';
 
 interface BadgeProps {
+	id: string;
 	label: string;
 	foundCount: number;
 	targetCount: number;
 	unlocked: boolean;
+	isPinned: boolean;
+	onPinnedChange: (id: string) => void;
 }
 
 export function Badge({
+	id,
 	label,
 	foundCount,
 	targetCount,
 	unlocked,
+	isPinned,
+	onPinnedChange,
 }: BadgeProps) {
 	const [isHovered, setIsHovered] = useState(false);
-	const [isPinned, setIsPinned] = useState(false);
 	const clampedFoundCount = Math.min(foundCount, targetCount);
 	const showTooltip = isHovered || isPinned;
 
@@ -24,7 +29,7 @@ export function Badge({
 				type="button"
 				onClick={(event) => {
 					event.stopPropagation();
-					setIsPinned((prev) => !prev);
+					onPinnedChange(id);
 				}}
 				onMouseEnter={() => setIsHovered(true)}
 				onMouseLeave={() => setIsHovered(false)}

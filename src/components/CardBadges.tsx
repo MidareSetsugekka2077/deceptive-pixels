@@ -8,6 +8,8 @@ import { Badge } from './Badge';
 interface CardBadgesProps {
 	challengeId: number;
 	badgeTargetCount: number;
+	pinnedBadgeId: string | null;
+	onPinnedBadgeChange: (badgeId: string) => void;
 }
 
 const unlockDatasets: { key: DatasetKey; label: string }[] = [
@@ -15,7 +17,12 @@ const unlockDatasets: { key: DatasetKey; label: string }[] = [
 	{ key: 'imagenet', label: 'ImageNet' },
 ];
 
-export function CardBadges({ challengeId, badgeTargetCount }: CardBadgesProps) {
+export function CardBadges({
+	challengeId,
+	badgeTargetCount,
+	pinnedBadgeId,
+	onPinnedBadgeChange,
+}: CardBadgesProps) {
 	const datasetUnlocks = unlockDatasets.map((dataset) => {
 		const foundCount = getFoundAttackedImageCount(challengeId, dataset.key);
 		const totalCount = getTotalTrackableAttackedImages(challengeId, dataset.key);
@@ -29,15 +36,23 @@ export function CardBadges({ challengeId, badgeTargetCount }: CardBadgesProps) {
 
 	return (
 		<div className="mt-auto flex w-full items-center justify-center gap-[28px] pt-8">
-			{datasetUnlocks.map((dataset) => (
-				<Badge
-					key={`${challengeId}-${dataset.key}`}
-					label={dataset.label}
-					foundCount={dataset.foundCount}
-					targetCount={badgeTargetCount}
-					unlocked={dataset.unlocked}
-				/>
-			))}
+			{datasetUnlocks.map((dataset) => {
+				// Keep only one tooltip pinned at a time by centralizing pinned state.
+				const badgeId = `${challengeId}-${dataset.key}`;
+
+				return (
+					<Badge
+						key={badgeId}
+						id={badgeId}
+						label={dataset.label}
+						foundCount={dataset.foundCount}
+						targetCount={badgeTargetCount}
+						unlocked={dataset.unlocked}
+						isPinned={pinnedBadgeId === badgeId}
+						onPinnedChange={onPinnedBadgeChange}
+					/>
+				);
+			})}
 		</div>
 	);
 }

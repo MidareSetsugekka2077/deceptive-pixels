@@ -4,6 +4,8 @@ import { CardBadges } from './CardBadges';
 interface ChallengeCardProps {
 	card: ChallengeCardData;
 	badgeTargetCount: number;
+	pinnedBadgeId: string | null;
+	onPinnedBadgeChange: (badgeId: string) => void;
 	onCardClick: (card: ChallengeCardData) => void;
 	onDetailsClick: (card: ChallengeCardData) => void;
 }
@@ -11,6 +13,8 @@ interface ChallengeCardProps {
 export function ChallengeCard({
 	card,
 	badgeTargetCount,
+	pinnedBadgeId,
+	onPinnedBadgeChange,
 	onCardClick,
 	onDetailsClick,
 }: ChallengeCardProps) {
@@ -61,6 +65,8 @@ export function ChallengeCard({
 			<CardBadges
 				challengeId={card.challengeId}
 				badgeTargetCount={badgeTargetCount}
+				pinnedBadgeId={pinnedBadgeId}
+				onPinnedBadgeChange={onPinnedBadgeChange}
 			/>
 		</div>
 	);

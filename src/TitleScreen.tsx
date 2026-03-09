@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ChallengeInfoDialog } from './components/ChallengeInfoDialog';
@@ -10,12 +10,8 @@ import {
 	CHALLENGE_CARDS,
 	type ChallengeCard as ChallengeCardData,
 } from './config/challengeCards';
-import {
-	getFoundAttackedImageCount,
-	getStoredScore,
-	getTotalTrackableAttackedImages,
-	resetAllStoredScores,
-} from './legacy/challengeScore';
+import { resetAllStoredScores } from './legacy/challengeScore';
+import { useChallengeScores } from './hooks/useChallengeScores';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -29,45 +25,15 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const [tutorialOpen, setTutorialOpen] = useState(false);
 	const [resetDialogOpen, setResetDialogOpen] = useState(false);
 	const [activeCard, setActiveCard] = useState<ChallengeCardData | null>(null);
+	const [pinnedBadgeId, setPinnedBadgeId] = useState<string | null>(null);
 	const badgeTargetCount = 10;
 
-	const datasetScores = useMemo(() => {
-		if (!activeCard) {
-			return { mnist: 0, imagenet: 0, max: maxChallengeScore };
-		}
-		return {
-			mnist: getStoredScore(activeCard.challengeId, 'mnist', maxChallengeScore),
-			imagenet: getStoredScore(activeCard.challengeId, 'imagenet', maxChallengeScore),
-			max: maxChallengeScore,
-		};
-	}, [activeCard, maxChallengeScore, datasetDialogOpen]);
-
-	const activeCardUnlockProgress = useMemo(() => {
-		if (!activeCard) {
-			return {
-				mnist: { foundCount: 0, totalCount: badgeTargetCount, unlocked: false },
-				imagenet: { foundCount: 0, totalCount: badgeTargetCount, unlocked: false },
-			};
-		}
-
-		const mnistFound = getFoundAttackedImageCount(activeCard.challengeId, 'mnist');
-		const imagenetFound = getFoundAttackedImageCount(activeCard.challengeId, 'imagenet');
-		const mnistTotal = getTotalTrackableAttackedImages(activeCard.challengeId, 'mnist');
-		const imagenetTotal = getTotalTrackableAttackedImages(activeCard.challengeId, 'imagenet');
-
-		return {
-			mnist: {
-				foundCount: Math.min(mnistFound, badgeTargetCount),
-				totalCount: badgeTargetCount,
-				unlocked: mnistTotal > 0 && mnistFound >= mnistTotal,
-			},
-			imagenet: {
-				foundCount: Math.min(imagenetFound, badgeTargetCount),
-				totalCount: badgeTargetCount,
-				unlocked: imagenetTotal > 0 && imagenetFound >= imagenetTotal,
-			},
-		};
-	}, [activeCard, badgeTargetCount, datasetDialogOpen]);
+	const { datasetScores, activeCardUnlockProgress } = useChallengeScores({
+		activeCard,
+		maxChallengeScore,
+		badgeTargetCount,
+		refreshKey: datasetDialogOpen,
+	});
 
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
@@ -122,6 +88,12 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 								key={`challenge-${card.challengeId}`}
 								card={card}
 								badgeTargetCount={badgeTargetCount}
+								pinnedBadgeId={pinnedBadgeId}
+								onPinnedBadgeChange={(badgeId) => {
+									setPinnedBadgeId((currentPinnedId) =>
+										currentPinnedId === badgeId ? null : badgeId,
+									);
+								}}
 								onCardClick={(selectedCard) => {
 									setActiveCard(selectedCard);
 									setDatasetDialogOpen(true);
