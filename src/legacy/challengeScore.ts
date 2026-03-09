@@ -60,6 +60,9 @@ const successfulAttackedByChallenge: Record<number, Record<DatasetKey, string[]>
 const getSuccessfulAttackedImages = (challengeId: number, dataset: DatasetKey) =>
   successfulAttackedByChallenge[challengeId]?.[dataset] ?? [];
 
+const getAllChallengeIds = () =>
+  Object.keys(successfulAttackedByChallenge).map((id) => Number.parseInt(id, 10));
+
 const getFoundImagesStorageKey = (challengeId: number, dataset: DatasetKey) =>
   `${FOUND_IMAGES_PREFIX}${dataset}:${challengeId}`;
 
@@ -155,6 +158,19 @@ export const getFoundAttackedImageCount = (
 
   return count;
 };
+
+export const getDatasetFoundAttackedImageCount = (dataset: DatasetKey) =>
+  getAllChallengeIds().reduce(
+    (totalCount, challengeId) => totalCount + getFoundAttackedImageCount(challengeId, dataset),
+    0,
+  );
+
+export const getDatasetTotalTrackableAttackedImages = (dataset: DatasetKey) =>
+  getAllChallengeIds().reduce(
+    (totalCount, challengeId) =>
+      totalCount + getTotalTrackableAttackedImages(challengeId, dataset),
+    0,
+  );
 
 export const setFoundAttackedImages = (
   challengeId: number,
