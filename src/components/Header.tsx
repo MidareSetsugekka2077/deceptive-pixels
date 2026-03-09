@@ -45,6 +45,7 @@ export function Header({
 	isGameplayHeader = false,
 }: HeaderProps) {
 	const location = useLocation();
+	const isTitlePage = location.pathname === '/';
 	const isGalleryPage = location.pathname === '/gallery';
 
 	const datasetProgress = {
@@ -58,7 +59,11 @@ export function Header({
 		return (
 			<div className="w-full bg-[#d8d8d8]">
 				<div className="mx-auto flex w-full max-w-[1240px] items-center justify-between gap-4 px-4 py-3 sm:px-6 md:min-h-[67px] md:px-10 md:py-0">
-					<div className="flex min-h-[67px] items-center bg-[rgba(174,174,174,0.65)] px-4 sm:px-[22px]">
+					<div
+						className={`flex min-h-[67px] items-center px-4 sm:px-[22px] ${
+							isTitlePage ? 'bg-[rgba(174,174,174,0.65)]' : ''
+						}`}
+					>
 						<Link
 							className="flex items-center gap-2"
 							to="/"
@@ -82,8 +87,12 @@ export function Header({
 	return (
 		<div className="w-full bg-[#d8d8d8]">
 			<div className="mx-auto flex w-full max-w-[1240px] flex-col gap-3 px-4 py-3 sm:px-6 md:flex-row md:items-center md:justify-between md:gap-4 md:px-10 md:py-0">
-				<div className="flex min-h-[67px] flex-wrap items-center gap-4 sm:gap-6">
-					<div className="flex min-h-[67px] items-center bg-[rgba(174,174,174,0.65)] px-4 sm:px-[22px]">
+				<div className="flex min-h-[67px] flex-wrap items-center gap-4 sm:gap-1">
+					<div
+						className={`flex min-h-[67px] items-center px-4 sm:px-[22px] ${
+							isTitlePage ? 'bg-[rgba(174,174,174,0.65)]' : ''
+						}`}
+					>
 						<Link
 							className="flex items-center gap-2"
 							to="/"
@@ -98,14 +107,18 @@ export function Header({
 						</Link>
 					</div>
 
-					<Link
-						to="/gallery"
-						className={`px-2 py-1 text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px] ${
+					<div
+						className={`flex min-h-[67px] items-center px-4 sm:px-[22px] ${
 							isGalleryPage ? 'bg-[rgba(174,174,174,0.65)]' : ''
 						}`}
 					>
-						Gallery
-					</Link>
+						<Link
+							to="/gallery"
+							className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
+						>
+							Gallery
+						</Link>
+					</div>
 					<button
 						type="button"
 						className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
