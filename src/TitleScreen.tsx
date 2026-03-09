@@ -3,10 +3,13 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from './components/Header';
 import { ChallengeInfoDialog } from './components/ChallengeInfoDialog';
 import { ResetScoresDialog } from './components/ResetScoresDialog';
+import { ChallengeCard } from './components/ChallengeCard';
 import { ImageSetSelection } from './ImageSetSelection';
 import { Tutorial } from './Tutorial';
-import { CHALLENGE_CARDS, type ChallengeCard } from './config/challengeCards';
-import type { DatasetKey } from './config/images';
+import {
+	CHALLENGE_CARDS,
+	type ChallengeCard as ChallengeCardData,
+} from './config/challengeCards';
 import {
 	getFoundAttackedImageCount,
 	getStoredScore,
@@ -25,9 +28,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 	const [detailsDialogOpen, setDetailsDialogOpen] = useState(false);
 	const [tutorialOpen, setTutorialOpen] = useState(false);
 	const [resetDialogOpen, setResetDialogOpen] = useState(false);
-	const [activeCard, setActiveCard] = useState<ChallengeCard | null>(null);
-	const [hoveredBadgeId, setHoveredBadgeId] = useState<string | null>(null);
-	const [pinnedBadgeId, setPinnedBadgeId] = useState<string | null>(null);
+	const [activeCard, setActiveCard] = useState<ChallengeCardData | null>(null);
 	const badgeTargetCount = 10;
 
 	const datasetScores = useMemo(() => {
@@ -67,11 +68,6 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 			},
 		};
 	}, [activeCard, badgeTargetCount, datasetDialogOpen]);
-
-	const unlockDatasets: { key: DatasetKey; label: string }[] = [
-		{ key: 'mnist', label: 'MNIST' },
-		{ key: 'imagenet', label: 'ImageNet' },
-	];
 
 	return (
 		<div className="min-h-screen bg-[#d8d8d8] text-black">
@@ -121,116 +117,21 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 			{/* Constrained cards section */}
 			<div className="mx-auto w-full px-5 pb-16">
 					<section className="mt-11 flex w-full flex-wrap items-center justify-center gap-[25px] px-3 sm:px-[68px]">
-						{CHALLENGE_CARDS.map((card, index) => {
-							const isActive = Boolean(card.path);
-							const datasetUnlocks = unlockDatasets.map((dataset) => {
-								const foundCount = getFoundAttackedImageCount(
-									card.challengeId,
-									dataset.key,
-								);
-								const totalCount = getTotalTrackableAttackedImages(
-									card.challengeId,
-									dataset.key,
-								);
-
-								return {
-									...dataset,
-									foundCount,
-									totalCount,
-									unlocked: totalCount > 0 && foundCount >= totalCount,
-								};
-							});
-
-							return (
-								<div
-									key={`challenge-${index}`}
-									className={`relative flex h-[300px] w-[350px] flex-col items-start bg-white p-6 text-left transition-all ${
-										isActive ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg' : 'cursor-not-allowed opacity-70'
-									}`}
-									onClick={() => {
-										if (!card.path) {
-											return;
-										}
-										setActiveCard(card);
-										setDatasetDialogOpen(true);
-									}}
-									role={isActive ? 'button' : undefined}
-									aria-disabled={!isActive}
-								>
-									<button
-										className="absolute right-5 top-5 flex h-10 w-10 items-center justify-center rounded-full border-2 border-[#0a0a0a] text-[20px] font-bold leading-none text-[#0a0a0a] transition-colors hover:bg-[#0a0a0a] hover:text-white"
-										onClick={(event) => {
-											event.stopPropagation();
-											setActiveCard(card);
-											setDetailsDialogOpen(true);
-										}}
-										type="button"
-										aria-label={`About ${card.title}`}
-									>
-										?
-									</button>
-									{card.cardIcon && (
-										<div className="mb-6 flex h-[24px] w-[24px] items-center justify-center">
-											<img alt="" className="h-full w-full" src={card.cardIcon} />
-										</div>
-									)}
-									{card.title && (
-										<p className="text-[32px] font-semibold leading-6 tracking-[-0.3125px]">
-											{card.title}
-										</p>
-									)}
-									{card.description && (
-										<p className="mt-2 text-[20px] leading-6 tracking-[-0.3125px]">
-											{card.description}
-										</p>
-									)}
-									<div className="mt-auto flex w-full items-center justify-center gap-[28px] pt-8">
-										{datasetUnlocks.map((dataset) => {
-											const badgeId = `${card.challengeId}-${dataset.key}`;
-											const showTooltip =
-												hoveredBadgeId === badgeId || pinnedBadgeId === badgeId;
-											const clampedFoundCount = Math.min(
-												dataset.foundCount,
-												badgeTargetCount,
-											);
-
-											return (
-												<div
-													key={badgeId}
-													className="relative"
-												>
-													<button
-														type="button"
-														onClick={(event) => {
-															event.stopPropagation();
-															setPinnedBadgeId((prev) => (prev === badgeId ? null : badgeId));
-														}}
-														onMouseEnter={() => setHoveredBadgeId(badgeId)}
-														onMouseLeave={() => setHoveredBadgeId((prev) => (prev === badgeId ? null : prev))}
-														onFocus={() => setHoveredBadgeId(badgeId)}
-														onBlur={() => setHoveredBadgeId((prev) => (prev === badgeId ? null : prev))}
-														className={`h-[35px] w-[35px] rounded-[10px] transition-transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-[#0d2d43] ${dataset.unlocked ? 'bg-[#ffe600]' : 'bg-[#40404a]'}`}
-														aria-label={`${dataset.label} progress ${clampedFoundCount}/${badgeTargetCount}`}
-													>
-														<span className="sr-only">
-															{dataset.label} {clampedFoundCount} of {badgeTargetCount} found
-														</span>
-													</button>
-													{showTooltip && (
-														<div className="pointer-events-none absolute bottom-[calc(100%+10px)] left-1/2 z-20 -translate-x-1/2">
-															<div className="whitespace-nowrap rounded-[12px] bg-[#0d2d43] px-3 py-2 text-[14px] font-semibold text-white shadow-lg">
-																{clampedFoundCount}/{badgeTargetCount}
-															</div>
-															<div className="mx-auto h-0 w-0 border-l-[7px] border-r-[7px] border-t-[8px] border-l-transparent border-r-transparent border-t-[#0d2d43]" />
-														</div>
-													)}
-												</div>
-											);
-										})}
-									</div>
-								</div>
-							);
-						})}
+						{CHALLENGE_CARDS.map((card) => (
+							<ChallengeCard
+								key={`challenge-${card.challengeId}`}
+								card={card}
+								badgeTargetCount={badgeTargetCount}
+								onCardClick={(selectedCard) => {
+									setActiveCard(selectedCard);
+									setDatasetDialogOpen(true);
+								}}
+								onDetailsClick={(selectedCard) => {
+									setActiveCard(selectedCard);
+									setDetailsDialogOpen(true);
+								}}
+							/>
+						))}
 					</section>
 			</div>
 
