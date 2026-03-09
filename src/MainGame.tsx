@@ -105,6 +105,7 @@ export function MainGame({
       <div className="min-h-[calc(100vh-2rem)] md:min-h-[calc(100vh-3rem)] border-8 border-[#9c9cb2] rounded-xl p-4 md:p-6">
         <div className="bg-[#cad1d7] rounded-2xl">
           <Header
+            isGameplayHeader
             rightContent={
               challengeLabel ? (
                 <div className="flex items-center gap-2 text-xl text-muted-foreground">
@@ -275,14 +276,6 @@ export function MainGame({
                           ))}
                         </ul>
                       </div>
-                      {/* <div className="space-y-2">
-                        <h4>🔵 ViT Strengths:</h4>
-                        <ul className="text-sm text-muted-foreground space-y-1 list-disc list-inside">
-                          <li>Better robustness to adversarial attacks</li>
-                          <li>Transformer architecture sees global context</li>
-                          <li>More resistant to pixel-level perturbations</li>
-                        </ul>
-                      </div> */}
                     </div>
                   </CardContent>
                 </Card>
