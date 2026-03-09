@@ -192,6 +192,16 @@ const challengeAssetsById: Record<number, Record<DatasetKey, ChallengeAssets>> =
   },
 };
 
+export const getAttackedImageSrc = (
+  challengeId: number,
+  dataset: DatasetKey,
+  filename: string,
+) => {
+  const assets = challengeAssetsById[challengeId]?.[dataset]
+    ?? challengeAssetsById[1].mnist;
+  return assets.resolveAttackedSrc(filename);
+};
+
 const randomizeImages = (challengeId: number, dataset: DatasetKey): ImageItem[] => {
   const assets = challengeAssetsById[challengeId]?.[dataset] ??
     challengeAssetsById[1].mnist;
