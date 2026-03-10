@@ -47,6 +47,7 @@ export function Header({
 	const location = useLocation();
 	const isTitlePage = location.pathname === '/';
 	const isGalleryPage = location.pathname === '/gallery';
+	const isHelpPage = location.pathname === '/help';
 
 	const datasetProgress = {
 		mnistFound: getDatasetFoundAttackedImageCount('mnist'),
@@ -119,12 +120,18 @@ export function Header({
 							Gallery
 						</Link>
 					</div>
-					<button
-						type="button"
-						className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
+					<div
+						className={`flex min-h-[67px] items-center px-4 sm:px-[22px] ${
+							isHelpPage ? 'bg-[rgba(174,174,174,0.65)]' : ''
+						}`}
 					>
-						Help
-					</button>
+						<Link
+							to="/help"
+							className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
+						>
+							Help
+						</Link>
+					</div>
 
 					{rightContent ? <div className="flex items-center">{rightContent}</div> : null}
 				</div>
