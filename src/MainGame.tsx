@@ -2,9 +2,9 @@ import { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
-import { Target, X, Zap, Trophy } from 'lucide-react';
-import { Dialog, DialogClose, DialogContent } from './components/ui/dialog';
+import { Target, Zap, Trophy } from 'lucide-react';
 import { Header } from './components/Header';
+import { Hint } from './components/Hint';
 import { CHALLENGE_CARDS } from './config/challengeCards';
 import { CHALLENGES } from './config/challenges';
 import type { DatasetKey } from './config/images';
@@ -121,7 +121,7 @@ export function MainGame({
             <div>
               <CardTitle>Challenge: Select adversarial images that fool the model. Understand the different kinds of adversarial attacks!</CardTitle>
               <CardDescription>
-                Extra Challenge: Can you reach 300 points?
+                Extra Challenge: Can you find all 10 images?
               </CardDescription>
             </div>
               <Button onClick={() => setHintOpen(true)} variant="outline" size="sm">
@@ -283,56 +283,14 @@ export function MainGame({
         </CardContent>
       </Card>
 
-      {/* Hint Dialog */}
-          <Dialog open={hintOpen} onOpenChange={setHintOpen}>
-            <DialogContent className="bg-[#d9d9d9] border-0 rounded-xl p-8 shadow-none sm:max-w-[617px] [&>button:last-child]:hidden">
-              <h2 className="pr-16 text-3xl font-semibold text-[#030213]">💡 Hint</h2>
-              <DialogClose
-                className="absolute right-6 top-6 inline-flex h-10 w-10 items-center justify-center rounded-full border-[3px] border-[#1d1b20] text-[#1d1b20] transition-colors hover:bg-black/10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-black/30 sm:right-8 sm:top-8"
-                aria-label="Close"
-              >
-                <X className="h-7 w-7" strokeWidth={2.75} />
-              </DialogClose>
-              <div className="flex items-center justify-center gap-4 mt-2">
-                <div className="flex flex-col items-center">
-                  <p className="text-sm text-[#030213] mb-2">Original</p>
-                  {hintOriginalImage ? (
-                    <img
-                      src={hintOriginalImage}
-                      alt={`${selectedChallengeCard?.title ?? 'Challenge'} original hint example`}
-                      className="h-[220px] w-[220px] rounded-[5px] border-[10px] border-white object-cover"
-                    />
-                  ) : (
-                    <div className="w-[220px] h-[220px] bg-white rounded-[5px]" />
-                  )}
-                </div>
-                <span className="text-4xl text-[#030213]">→</span>
-                <div className="flex flex-col items-center">
-                  <p className="text-sm text-[#030213] mb-2">Attacked</p>
-                  {hintAttackedImage ? (
-                    <img
-                      src={hintAttackedImage}
-                      alt={`${selectedChallengeCard?.title ?? 'Challenge'} attacked hint example`}
-                      className="h-[220px] w-[220px] rounded-[5px] border-[10px] border-white object-cover"
-                    />
-                  ) : (
-                    <div className="w-[220px] h-[220px] bg-white rounded-[5px]" />
-                  )}
-                </div>
-              </div>
-              <p className="text-center text-lg text-[#030213] mt-2">
-                {selectedChallengeConfig?.hint ?? 'Look for differences between the original and attacked images!'}
-              </p>
-              <div className="flex justify-center mt-2">
-                <Button
-                  onClick={() => setHintOpen(false)}
-                  className="bg-[#fff200] hover:bg-[#e6d900] text-black font-normal px-8 h-[39px] rounded-[3px] shadow-none"
-                >
-                  Got it!
-                </Button>
-              </div>
-            </DialogContent>
-          </Dialog>
+      <Hint
+        open={hintOpen}
+        onOpenChange={setHintOpen}
+        title={selectedChallengeCard?.title}
+        hint={selectedChallengeConfig?.hint}
+        originalImage={hintOriginalImage}
+        attackedImage={hintAttackedImage}
+      />
         </div>
       </div>
     </div>
