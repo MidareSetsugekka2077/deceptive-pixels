@@ -118,7 +118,7 @@ export const HELP_TOPICS: HelpTopic[] = [
       {
         visualLabel: 'Common attack styles',
         body:
-          'This project includes attacks like pixel edits, shifts, rotations, blur, noise, and patches. Each one perturbs the image in a different way.',
+          'Deceptive Pixels includes attacks like pixel edits, shifts, rotations, blur, noise, and patches. Each one perturbs the image in a different way.',
       },
     ],
   },
@@ -154,12 +154,12 @@ export const HELP_TOPICS: HelpTopic[] = [
       {
         visualLabel: 'Attack constraints',
         body:
-          'Attacks usually have limits, such as small perturbation budgets. If the limit is too strict, the change may be insufficient to force misclassification.',
+          'Attacks usually have limits, such as small perturbation budgets. For example, if the image has a high enough resolution, the change may be insufficient to force misclassification.',
       },
       {
         visualLabel: 'Model robustness',
         body:
-          'Some samples are naturally more robust, and some models use defenses or training strategies that make attacks less effective in practice.',
+          'Some samples are naturally more robust, and some models use defenses or training strategies that make some attacks less effective in practice.',
       },
       {
         visualLabel: 'Optimization issues',
@@ -187,7 +187,7 @@ export const HELP_TOPICS: HelpTopic[] = [
       {
         visualLabel: 'Responsible deployment',
         body:
-          'Studying failure modes is part of building trustworthy AI. Awareness of adversarial risk supports safer deployment decisions.',
+          'Studying how AI can fail is part of building better AI models. Awareness of adversarial risk supports safer deployment decisions and reminds us to not be overconfident in AI.',
       },
     ],
   },
