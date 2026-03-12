@@ -191,12 +191,12 @@ export function MainGame({
           {/* Image Pool */}
           {selectedChallenge && (
             <>
-              <div className="border-2 rounded-lg p-6 bg-background">
-                <div className="flex items-center justify-between mb-4">
-                  <h3>Pick 3 Images That Were Adversarially Attacked to Fool the CNN Model</h3>
+              <div className="border-2 rounded-lg p-3 bg-background">
+                <div className="flex items-center justify-between mb-2">
+                  <h3 className="text-sm font-medium">Pick 3 Images That Were Adversarially Attacked to Fool the CNN Model</h3>
                   <Badge variant="outline">{selectedImageIds.length}/3 selected</Badge>
                 </div>
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                <div className="grid grid-cols-3 gap-3 justify-items-center">
                   {imagePool.map((img) => {
                     const isSelected = selectedImageIds.includes(img.id);
                     const isCorrect = revealed && img.isAttacked && isSelected;
@@ -207,13 +207,13 @@ export function MainGame({
                       <div
                         key={img.id}
                         onClick={() => !revealed && toggleImage(img.id)}
-                        className={`relative border-2 rounded-lg p-4 cursor-pointer transition-all ${
+                        className={`relative border-2 rounded-lg p-2 cursor-pointer transition-all max-w-[200px] w-full ${
                           isSelected ? 'border-primary bg-primary/5' : 'hover:border-primary/50'
                         } ${isCorrect ? 'border-green-500 bg-green-500/10' : ''} ${
                           isWrong ? 'border-red-500 bg-red-500/10' : ''
                         } ${isMissed ? 'border-yellow-500 bg-yellow-500/10' : ''}`}
                       >
-                        <div className="aspect-square bg-muted rounded border flex items-center justify-center mb-2 overflow-hidden">
+                        <div className="aspect-square bg-muted rounded border flex items-center justify-center mb-1 overflow-hidden">
                           <img
                             src={img.src}
                             alt={img.id}
