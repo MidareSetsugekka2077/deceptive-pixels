@@ -9,14 +9,26 @@ interface HelpPage {
 interface HelpTopic {
   id: string;
   question: string;
+  source: string;
   accentColor: string;
   pages: HelpPage[];
 }
+
+// Mapping of topic IDs to their help images (shown on first page only)
+const TOPIC_IMAGES: Record<string, string> = {
+  cnn: '/help/cnn1.webp',
+  vit: '/help/vit1.png',
+  mnist: '/help/mnist.png',
+  imagenet: '/help/imagenet.webp',
+  'adversarial-attacks': '/help/adversarial_attack.png',
+  'why-care': '/help/why_care.png',
+};
 
 const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'cnn',
     question: 'What is a CNN?',
+    source: 'https://www.codecademy.com/article/understanding-convolutional-neural-network-cnn-architecture',
     accentColor: '#fb2c36',
     pages: [
       {
@@ -32,13 +44,14 @@ const HELP_TOPICS: HelpTopic[] = [
       {
         visualLabel: 'Why this matters here',
         body:
-          'In this game, a CNN can be tricked by small image changes. You are exploring examples where those changes cause confident but incorrect predictions.',
+          'In this game, a CNN can be tricked by small changes to an image. You are exploring examples where those changes cause confident but incorrect predictions.',
       },
     ],
   },
   {
     id: 'vit',
     question: 'What is a ViT?',
+    source: 'https://arxiv.org/pdf/2010.11929',
     accentColor: '#f0b100',
     pages: [
       {
@@ -54,13 +67,14 @@ const HELP_TOPICS: HelpTopic[] = [
       {
         visualLabel: 'In adversarial settings',
         body:
-          'ViTs can still be fooled by adversarial inputs, but the failure patterns may differ from CNNs because they rely on different internal representations.',
+          'ViTs can still be fooled by adversarial inputs, but the failure patterns may differ from CNNs because they rely on different internal representations. Some attacks are still highly effective against ViTs.',
       },
     ],
   },
   {
     id: 'mnist',
     question: 'What is MNIST?',
+    source: 'https://en.wikipedia.org/wiki/MNIST_database',
     accentColor: '#ffe600',
     pages: [
       {
@@ -78,6 +92,7 @@ const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'imagenet',
     question: 'What is ImageNet?',
+    source: 'https://en.wikipedia.org/wiki/ImageNet',
     accentColor: '#008945',
     pages: [
       {
@@ -95,6 +110,7 @@ const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'adversarial-attacks',
     question: 'What are adversarial attacks?',
+    source: 'https://arxiv.org/pdf/2312.16880',
     accentColor: '#39ff7e',
     pages: [
       {
@@ -112,6 +128,7 @@ const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'why-work',
     question: 'Why do these attacks work?',
+    source: 'https://arxiv.org/pdf/2312.16880',
     accentColor: '#0d55f1',
     pages: [
       {
@@ -134,6 +151,7 @@ const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'why-fail',
     question: 'Why do some attacks not work?',
+    source: 'https://arxiv.org/pdf/2403.08170',
     accentColor: '#a70ee8',
     pages: [
       {
@@ -156,6 +174,7 @@ const HELP_TOPICS: HelpTopic[] = [
   {
     id: 'why-care',
     question: 'Why should I care?',
+    source: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10487122/',
     accentColor: '#0a0a0a',
     pages: [
       {
@@ -250,9 +269,17 @@ export function Help() {
 
               <article className="w-full max-w-[480px] rounded-[5px] bg-white px-4 pb-3 pt-3 sm:px-5 sm:pb-4 sm:pt-[11px]">
                 <div className="h-[210px] w-full bg-[#a1a1ab] sm:h-[243px]">
-                  <div className="flex h-full w-full items-center justify-center px-4 text-center text-[18px] font-medium text-black/75 sm:text-[20px]">
-                    {currentPage.visualLabel}
-                  </div>
+                  {pageIndex === 0 && TOPIC_IMAGES[activeTopic.id] ? (
+                    <img
+                      src={TOPIC_IMAGES[activeTopic.id]}
+                      alt={currentPage.visualLabel}
+                      className="h-full w-full rounded-[2px] object-contain"
+                    />
+                  ) : (
+                    <div className="flex h-full w-full items-center justify-center px-4 text-center text-[18px] font-medium text-black/75 sm:text-[20px]">
+                      {currentPage.visualLabel}
+                    </div>
+                  )}
                 </div>
 
                 <p className="px-2 pb-2 pt-7 text-[16px] leading-[1.5] tracking-[-0.2px] sm:px-6">
@@ -261,6 +288,18 @@ export function Help() {
 
                 <div className="mx-auto flex h-[20px] w-[40px] items-center justify-center rounded-[2px] bg-[#d9d9d9] text-[16px] leading-6 tracking-[-0.3125px]">
                   {pageIndex + 1}/{totalPages}
+                </div>
+
+                <div className="mt-4 border-t border-[#d9d9d9] pt-3 text-center">
+                  <span className="text-[14px] text-black">Learn more: </span>
+                  <a
+                    href={activeTopic.source}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-[14px] text-blue-600 hover:underline break-words"
+                  >
+                    {activeTopic.source}
+                  </a>
                 </div>
               </article>
 
