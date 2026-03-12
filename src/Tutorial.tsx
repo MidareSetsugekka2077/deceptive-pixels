@@ -24,12 +24,6 @@ const TUTORIAL_STEPS = [
     content: 'Convolutional Neural Networks (CNNs) represent a class of deep learning models specifically engineered for processing structured grid data, such as images. CNNs exploit spatial hierarchies in data through a specialized architecture that includes convolutional layers, which apply filters to detect local patterns within the input.',
     highlight: null,
   },
-//   {
-//     id: 3,
-//     title: 'Understanding Vision Transformers',
-//     content: 'Vision Transformers (ViTs) use attention mechanisms to look at the entire image at once. They understand global context better than CNNs, making them possibly more robust to transformations and less fooled by texture alone.',
-//     highlight: null,
-//   },
   {
     id: 3,
     title: 'Your Mission',

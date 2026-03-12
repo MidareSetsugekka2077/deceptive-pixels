@@ -7,6 +7,7 @@ export interface ChallengeCard {
 	previewImages?: {
 		original: string;
 		attacked: string;
+		hintAttacked?: string;
 	};
 	attackDetails: {
 		description: string;
@@ -25,6 +26,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/mnist/original/13_idx12_true2_pred2.png',
 			attacked: '/cnn/mnist/pixel/successful_attacks_images/attack_6_attacked_pred7.png',
+			hintAttacked: '/hint/pixel_hint.png',
 		},
 		attackDetails: {
 			description: 'Pixel Attack involves modifying one or more pixels in the image.',
@@ -43,6 +45,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/mnist/original/14_idx13_true7_pred7.png',
 			attacked: '/cnn/mnist/rotate/successful_attacks_images/rotate_attack_7_attacked_pred9_rot15deg.png',
+			hintAttacked: '/hint/rotate_hint.png',
 		},
 		attackDetails: {
 			description: 'Rotation Attack involves rotating the image by a certain amount of degrees.',
@@ -61,6 +64,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/mnist/original/07_idx6_true6_pred6.png',
 			attacked: '/cnn/mnist/shift/successful_attacks_images/shift_attack_6_attacked_pred2_dx5_dy-5.png',
+			hintAttacked: '/hint/shift_hint.png',
 		},
 		attackDetails: {
 			description: 'Shift Attack involves translating the image up, down, left or right by a certain amount of pixels.',
@@ -79,6 +83,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/mnist/original/15_idx14_true5_pred5.png',
 			attacked: '/cnn/mnist/noise/successful_attacks_images/noise_attack_7_attacked_pred3_sigma0.25.png',
+			hintAttacked: '/hint/noise_hint.png',
 		},
 		attackDetails: {
 			description: 'Random Noise Attack involves applying random filters to images or changing RGB values of random pixels.',
@@ -97,6 +102,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/mnist/original/16_idx15_true3_pred3.png',
 			attacked: '/cnn/mnist/blur/successful_attacks_images/blur_attack_9_attacked_pred5_k5_s1.5.png',
+			hintAttacked: '/hint/blur_hint.png',
 		},
 		attackDetails: {
 			description: 'Blur Attack involves applying a Gaussian blur (usually) to an image.',
@@ -115,6 +121,7 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		previewImages: {
 			original: '/cnn/imagenet/original/original_10_true0.png',
 			attacked: '/cnn/imagenet/patch/imagenet_successful_attacks_images/patch_attack_8_attacked_pred113_x57_y87.png',
+			hintAttacked: '/hint/patch_hint.png',
 		},
 		attackDetails: {
 			description: 'Adversarial Patch Attack involves adding a specially trained patch and placing it on the image.',
