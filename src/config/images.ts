@@ -152,16 +152,6 @@ export const EMOJI_ATTACK_IMAGES: ChallengeImageSet = {
     'emoji_attack_7_attacked_pred6_x20_y12_h8_w8.png',
     'emoji_attack_8_attacked_pred9_x14_y20_h8_w8.png',
     'emoji_attack_9_attacked_pred8_x7_y11_h8_w8.png',
-    'failed_emoji_0_attacked_pred8_x4_y1_h8_w8.png',
-    'failed_emoji_1_attacked_pred4_x18_y3_h8_w8.png',
-    'failed_emoji_2_attacked_pred7_x6_y12_h8_w8.png',
-    'failed_emoji_3_attacked_pred7_x3_y15_h8_w8.png',
-    'failed_emoji_4_attacked_pred0_x12_y11_h8_w8.png',
-    'failed_emoji_5_attacked_pred6_x13_y10_h8_w8.png',
-    'failed_emoji_6_attacked_pred2_x18_y10_h8_w8.png',
-    'failed_emoji_7_attacked_pred7_x13_y7_h8_w8.png',
-    'failed_emoji_8_attacked_pred4_x13_y6_h8_w8.png',
-    'failed_emoji_9_attacked_pred3_x14_y9_h8_w8.png',
   ],
 };
 
@@ -212,16 +202,6 @@ export const LINE_ATTACK_IMAGES: ChallengeImageSet = {
     'black_line_7_attacked_pred7_horizontal_fixed7_start0_len20.png',
     'black_line_8_attacked_pred9_horizontal_fixed11_start4_len20.png',
     'black_line_9_attacked_pred7_horizontal_fixed5_start1_len16.png',
-    'failed_black_line_0_attacked_pred8_vertical_fixed9_start2_len12.png',
-    'failed_black_line_1_attacked_pred4_horizontal_fixed8_start1_len12.png',
-    'failed_black_line_2_attacked_pred8_vertical_fixed1_start2_len16.png',
-    'failed_black_line_3_attacked_pred7_horizontal_fixed19_start4_len24.png',
-    'failed_black_line_4_attacked_pred7_vertical_fixed15_start3_len24.png',
-    'failed_black_line_5_attacked_pred0_vertical_fixed9_start0_len24.png',
-    'failed_black_line_6_attacked_pred6_horizontal_fixed7_start13_len12.png',
-    'failed_black_line_7_attacked_pred2_vertical_fixed17_start2_len24.png',
-    'failed_black_line_8_attacked_pred7_vertical_fixed21_start0_len28.png',
-    'failed_black_line_9_attacked_pred4_vertical_fixed20_start7_len20.png',
   ],
 };
 
@@ -267,11 +247,6 @@ export const MIRROR_ATTACK_IMAGES: ChallengeImageSet = {
     'mirror_attack_7_attacked_pred8_horizontal.png',
     'mirror_attack_8_attacked_pred0_vertical.png',
     'mirror_attack_9_attacked_pred5_horizontal.png',
-    'failed_mirror_0_attacked_pred8_vertical.png',
-    'failed_mirror_1_attacked_pred8_vertical.png',
-    'failed_mirror_2_attacked_pred0_vertical.png',
-    'failed_mirror_3_attacked_pred4_horizontal.png',
-    'failed_mirror_4_attacked_pred8_vertical.png',
   ],
 };
 
@@ -317,11 +292,6 @@ export const NOISE_ATTACK_IMAGES: ChallengeImageSet = {
     'noise_attack_7_attacked_pred3_sigma0.25.png',
     'noise_attack_8_attacked_pred9_sigma0.2.png',
     'noise_attack_9_attacked_pred2_sigma0.25.png',
-    'failed_noise_0_attacked_pred8_sigma0.2.png',
-    'failed_noise_1_attacked_pred4_sigma0.25.png',
-    'failed_noise_2_attacked_pred8_sigma0.15.png',
-    'failed_noise_3_attacked_pred7_sigma0.2.png',
-    'failed_noise_4_attacked_pred7_sigma0.25.png',
   ],
 };
 
@@ -367,11 +337,6 @@ export const BLUR_ATTACK_IMAGES: ChallengeImageSet = {
     'blur_attack_7_attacked_pred9_k7_s2.0.png',
     'blur_attack_8_attacked_pred1_k7_s2.0.png',
     'blur_attack_9_attacked_pred5_k5_s1.5.png',
-    'failed_blur_0_attacked_pred8_k7_s0.5.png',
-    'failed_blur_1_attacked_pred4_k5_s1.5.png',
-    'failed_blur_2_attacked_pred8_k5_s1.0.png',
-    'failed_blur_3_attacked_pred7_k5_s1.5.png',
-    'failed_blur_4_attacked_pred7_k7_s2.0.png',
   ],
 };
 
@@ -413,7 +378,6 @@ export const PATCH_ATTACK_IMAGES: ChallengeImageSet = {
     'patch_attack_7_attacked_pred5_x7_y18_h8_w8.png',
     'patch_attack_8_attacked_pred7_x11_y1_h8_w8.png',
     'patch_attack_9_attacked_pred7_x17_y7_h8_w8.png',
-    'failed_patch_0_attacked_pred4_x20_y6_h8_w8.png',
   ],
 };
 
@@ -510,11 +474,6 @@ export const IMAGENET_BLUR_ATTACK_IMAGES: ChallengeImageSet = {
     'blur_attack_7_attacked_pred88_sigma2p00.png',
     'blur_attack_8_attacked_pred122_sigma1p75.png',
     'blur_attack_9_attacked_pred44_sigma1p50.png',
-    'failed_blur_0_true0_pred0_sigma1p75.png',
-    'failed_blur_1_true0_pred0_sigma1p50.png',
-    'failed_blur_2_true0_pred0_sigma1p75.png',
-    'failed_blur_3_true0_pred0_sigma0p75.png',
-    'failed_blur_4_true0_pred0_sigma1p00.png',
   ],
 };
 
@@ -611,8 +570,6 @@ export const IMAGENET_PATCH_ATTACK_IMAGES: ChallengeImageSet = {
     'patch_attack_7_attacked_pred176_x79_y11.png',
     'patch_attack_8_attacked_pred113_x57_y87.png',
     'patch_attack_9_attacked_pred47_x22_y27.png',
-    'failed_patch_0_true0_pred0_x15_y65.png',
-    'failed_patch_1_true0_pred0_x51_y9.png',
   ],
 };
 
@@ -661,10 +618,6 @@ export const IMAGENET_ROTATE_ATTACK_IMAGES: ChallengeImageSet = {
     'rotate_attack_7_attacked_pred189_rot5deg.png',
     'rotate_attack_8_attacked_pred113_rot-2deg.png',
     'rotate_attack_9_attacked_pred164_rot-3deg.png',
-    'failed_rotate_0_true0_pred0_rot-2deg.png',
-    'failed_rotate_1_true0_pred0_rot2deg.png',
-    'failed_rotate_2_true0_pred0_rot-15deg.png',
-    'failed_rotate_3_true0_pred0_rot-15deg.png',
   ],
 };
 
@@ -713,7 +666,6 @@ export const IMAGENET_SHIFT_ATTACK_IMAGES: ChallengeImageSet = {
     'shift_attack_7_attacked_pred130_dx8_dy-4.png',
     'shift_attack_8_attacked_pred93_dx-6_dy8.png',
     'shift_attack_9_attacked_pred104_dx2_dy-4.png',
-    'failed_shift_0_true0_pred0_dx-2_dy6.png',
   ],
 };
 
@@ -810,7 +762,6 @@ export const IMAGENET_LINE_ATTACK_IMAGES: ChallengeImageSet = {
     'black_line_attack_7_attacked_pred18_vertical_31.png',
     'black_line_attack_8_attacked_pred101_vertical_30.png',
     'black_line_attack_9_attacked_pred69_vertical_58.png',
-    'failed_black_line_0_true0_pred0_vertical_35.png',
   ],
 };
 
@@ -859,10 +810,5 @@ export const IMAGENET_MIRROR_ATTACK_IMAGES: ChallengeImageSet = {
     'flip_attack_7_attacked_pred60_vertical.png',
     'flip_attack_8_attacked_pred2_vertical.png',
     'flip_attack_9_attacked_pred46_vertical.png',
-    'failed_flip_0_true0_pred0_vertical.png',
-    'failed_flip_1_true0_pred0_vertical.png',
-    'failed_flip_2_true0_pred0_vertical.png',
-    'failed_flip_3_true0_pred0_horizontal.png',
-    'failed_flip_4_true0_pred0_vertical.png',
   ],
 };
