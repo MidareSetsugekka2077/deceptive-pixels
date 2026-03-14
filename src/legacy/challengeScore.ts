@@ -1,12 +1,18 @@
 import type { DatasetKey } from '../config/images';
 import {
   BLUR_ATTACK_IMAGES,
+  EMOJI_ATTACK_IMAGES,
   IMAGENET_BLUR_ATTACK_IMAGES,
+  IMAGENET_EMOJI_ATTACK_IMAGES,
+  IMAGENET_LINE_ATTACK_IMAGES,
+  IMAGENET_MIRROR_ATTACK_IMAGES,
   IMAGENET_NOISE_ATTACK_IMAGES,
   IMAGENET_PATCH_ATTACK_IMAGES,
   IMAGENET_PIXEL_ATTACK_IMAGES,
   IMAGENET_ROTATE_ATTACK_IMAGES,
   IMAGENET_SHIFT_ATTACK_IMAGES,
+  LINE_ATTACK_IMAGES,
+  MIRROR_ATTACK_IMAGES,
   NOISE_ATTACK_IMAGES,
   PATCH_ATTACK_IMAGES,
   PIXEL_ATTACK_IMAGES,
@@ -52,6 +58,24 @@ const successfulAttackedByChallenge: Record<number, Record<DatasetKey, string[]>
   6: {
     mnist: PATCH_ATTACK_IMAGES.attacked.filter((name) => !name.startsWith('failed_')),
     imagenet: IMAGENET_PATCH_ATTACK_IMAGES.attacked.filter(
+      (name) => !name.startsWith('failed_'),
+    ),
+  },
+  7: {
+    mnist: EMOJI_ATTACK_IMAGES.attacked.filter((name) => !name.startsWith('failed_')),
+    imagenet: IMAGENET_EMOJI_ATTACK_IMAGES.attacked.filter(
+      (name) => !name.startsWith('failed_'),
+    ),
+  },
+  8: {
+    mnist: LINE_ATTACK_IMAGES.attacked.filter((name) => !name.startsWith('failed_')),
+    imagenet: IMAGENET_LINE_ATTACK_IMAGES.attacked.filter(
+      (name) => !name.startsWith('failed_'),
+    ),
+  },
+  9: {
+    mnist: MIRROR_ATTACK_IMAGES.attacked.filter((name) => !name.startsWith('failed_')),
+    imagenet: IMAGENET_MIRROR_ATTACK_IMAGES.attacked.filter(
       (name) => !name.startsWith('failed_'),
     ),
   },
