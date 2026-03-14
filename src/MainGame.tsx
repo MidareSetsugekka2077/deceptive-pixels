@@ -15,6 +15,7 @@ import {
   setFoundAttackedImages,
   setStoredScore,
 } from './legacy/challengeScore';
+import { trackAnalyticsEvent } from './lib/analytics';
 
 interface MainGameProps {
   fixedChallengeId?: number;
@@ -35,6 +36,8 @@ export function MainGame({
   const [score, setScore] = useState(0);
   const [currentAttemptScore, setCurrentAttemptScore] = useState(0);
   const [hintOpen, setHintOpen] = useState(false);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [challengeStartMs, setChallengeStartMs] = useState<number | null>(null);
   const { imagePool, resetImages } = useImages(selectedChallenge, dataset);
   const { revealed, reveal, resetPhase } = useGameState();
   const selectedChallengeConfig = selectedChallenge
@@ -57,11 +60,29 @@ export function MainGame({
     if (!selectedChallenge) {
       setScore(0);
       setCurrentAttemptScore(0);
+      setAttemptCount(0);
+      setChallengeStartMs(null);
       return;
     }
 
     setScore(getStoredScore(selectedChallenge, dataset, maxChallengeScore));
     setCurrentAttemptScore(0);
+    setAttemptCount(0);
+    setChallengeStartMs(Date.now());
+  }, [selectedChallenge, dataset]);
+
+  useEffect(() => {
+    if (!selectedChallenge) {
+      return;
+    }
+
+    const bestScoreAtStart = getStoredScore(selectedChallenge, dataset, maxChallengeScore);
+
+    trackAnalyticsEvent('challenge_started', {
+      challengeId: selectedChallenge,
+      dataset,
+      bestScoreAtStart,
+    });
   }, [selectedChallenge, dataset]);
 
   const toggleImage = (imgId: string) => {
@@ -80,9 +101,12 @@ export function MainGame({
     });
     const correctCount = correctlySelectedAttackedIds.length;
     const points = correctCount * 10;
+    const nextAttemptNumber = attemptCount + 1;
+    const elapsedMs = challengeStartMs ? Math.max(Date.now() - challengeStartMs, 0) : 0;
     setCurrentAttemptScore(points);
     const nextScore = Math.min(Math.max(score, points), maxChallengeScore);
     setScore(nextScore);
+    setAttemptCount(nextAttemptNumber);
     if (selectedChallenge) {
       setStoredScore(selectedChallenge, dataset, nextScore);
       setFoundAttackedImages(
@@ -90,15 +114,55 @@ export function MainGame({
         dataset,
         correctlySelectedAttackedIds,
       );
+
+      trackAnalyticsEvent('challenge_attempt_submitted', {
+        challengeId: selectedChallenge,
+        dataset,
+        attemptNumber: nextAttemptNumber,
+        selectedCount: selectedImageIds.length,
+        correctCount,
+        points,
+        bestScoreBefore: score,
+        bestScoreAfter: nextScore,
+        elapsedMs,
+      });
+
+      if (score < maxChallengeScore && nextScore === maxChallengeScore) {
+        trackAnalyticsEvent('challenge_completed', {
+          challengeId: selectedChallenge,
+          dataset,
+          attemptNumber: nextAttemptNumber,
+          completionScore: nextScore,
+          timeToCompleteMs: elapsedMs,
+        });
+      }
     }
     reveal();
   };
 
   const reset = () => {
+    if (selectedChallenge) {
+      trackAnalyticsEvent('challenge_try_again_clicked', {
+        challengeId: selectedChallenge,
+        dataset,
+      });
+    }
     setSelectedImageIds([]);
     setCurrentAttemptScore(0);
     resetPhase();
     resetImages();
+  };
+
+  const openHint = () => {
+    if (selectedChallenge) {
+      trackAnalyticsEvent('hint_opened', {
+        challengeId: selectedChallenge,
+        dataset,
+        attemptNumber: attemptCount,
+      });
+    }
+
+    setHintOpen(true);
   };
 
   return (
@@ -124,7 +188,7 @@ export function MainGame({
                 Extra Challenge: Can you find all 10 images?
               </CardDescription>
             </div>
-              <Button onClick={() => setHintOpen(true)} variant="outline" size="sm">
+              <Button onClick={openHint} variant="outline" size="sm">
                 💡 Hint
               </Button>
             </div>

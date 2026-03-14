@@ -12,6 +12,7 @@ import {
 } from './config/challengeCards';
 import { resetAllStoredScores } from './legacy/challengeScore';
 import { useChallengeScores } from './hooks/useChallengeScores';
+import { trackAnalyticsEvent } from './lib/analytics';
 
 interface TitleScreenProps {
 	onPlay: () => void;
@@ -58,21 +59,30 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					</p>
 					<button
 						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-extrabold leading-6 tracking-[-0.3125px] text-black transition-colors duration-200 hover:bg-[#e7cf00]"
-						onClick={onPlay}
+						onClick={() => {
+							trackAnalyticsEvent('play_clicked');
+							onPlay();
+						}}
 						type="button"
 					>
 						Play
 					</button>
 					<button
 						className="rounded-[5px] border-2 border-white px-[40px] py-[16px] text-[24px] font-semibold leading-3 tracking-[-0.3125px] text-white transition-colors duration-200 hover:bg-white hover:text-[#0d2d43]"
-						onClick={() => setTutorialOpen(true)}
+						onClick={() => {
+							trackAnalyticsEvent('tutorial_opened', { source: 'title_screen_button' });
+							setTutorialOpen(true);
+						}}
 						type="button"
 					>
 						Tutorial
 					</button>
 					<button
 						className="rounded-[5px] border-2 border-[#ff8f8f] px-[26px] py-[12px] text-[18px] font-semibold leading-3 tracking-[-0.3125px] text-[#ffd7d7] transition-colors duration-200 hover:bg-[#ff8f8f] hover:text-[#0d2d43]"
-						onClick={() => setResetDialogOpen(true)}
+						onClick={() => {
+							trackAnalyticsEvent('reset_scores_dialog_opened');
+							setResetDialogOpen(true);
+						}}
 						type="button"
 					>
 						Reset Scores
@@ -95,10 +105,16 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 									);
 								}}
 								onCardClick={(selectedCard) => {
+									trackAnalyticsEvent('challenge_card_opened', {
+										challengeId: selectedCard.challengeId,
+									});
 									setActiveCard(selectedCard);
 									setDatasetDialogOpen(true);
 								}}
 								onDetailsClick={(selectedCard) => {
+									trackAnalyticsEvent('challenge_details_opened', {
+										challengeId: selectedCard.challengeId,
+									});
 									setActiveCard(selectedCard);
 									setDetailsDialogOpen(true);
 								}}
@@ -132,6 +148,10 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 					if (!activeCard?.path) {
 						return;
 					}
+					trackAnalyticsEvent('dataset_selected', {
+						challengeId: activeCard.challengeId,
+						dataset,
+					});
 					setDatasetDialogOpen(false);
 					navigate(`${activeCard.path}?dataset=${dataset}`);
 				}}
@@ -147,6 +167,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 				open={resetDialogOpen}
 				onOpenChange={setResetDialogOpen}
 				onConfirmReset={() => {
+					trackAnalyticsEvent('reset_scores_confirmed');
 					resetAllStoredScores();
 					setResetDialogOpen(false);
 				}}

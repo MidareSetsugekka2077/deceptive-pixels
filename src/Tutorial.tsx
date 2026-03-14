@@ -4,6 +4,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Alert, AlertDescription } from './components/ui/alert';
 import { Progress } from './components/ui/progress';
 import { BookOpen, ChevronRight, ChevronLeft, Trophy, Target, Lightbulb } from 'lucide-react';
+import { trackAnalyticsEvent } from './lib/analytics';
 
 const TUTORIAL_STEPS = [
   {
@@ -62,13 +63,22 @@ export function Tutorial({ open, onOpenChange, onComplete }: TutorialProps) {
   useEffect(() => {
     if (open) {
       setStep(0);
+      trackAnalyticsEvent('tutorial_opened', { source: 'dialog' });
     }
   }, [open]);
 
   const nextStep = () => {
+    trackAnalyticsEvent('tutorial_next_clicked', {
+      fromStep: step,
+      toStep: Math.min(step + 1, TUTORIAL_STEPS.length - 1),
+    });
+
     if (step < TUTORIAL_STEPS.length - 1) {
       setStep(step + 1);
     } else {
+      trackAnalyticsEvent('tutorial_completed', {
+        totalSteps: TUTORIAL_STEPS.length,
+      });
       onOpenChange(false);
       onComplete();
     }
@@ -76,11 +86,19 @@ export function Tutorial({ open, onOpenChange, onComplete }: TutorialProps) {
 
   const prevStep = () => {
     if (step > 0) {
+      trackAnalyticsEvent('tutorial_previous_clicked', {
+        fromStep: step,
+        toStep: step - 1,
+      });
       setStep(step - 1);
     }
   };
 
   const skip = () => {
+    trackAnalyticsEvent('tutorial_skipped', {
+      atStep: step,
+      totalSteps: TUTORIAL_STEPS.length,
+    });
     onOpenChange(false);
     onComplete();
   };

@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { CHALLENGE_CARDS } from './config/challengeCards';
 import type { DatasetKey } from './config/images';
 import { getAttackedImageSrc } from './hooks/useImages';
 import {
+  getDatasetFoundAttackedImageCount,
+  getDatasetTotalTrackableAttackedImages,
   getFoundAttackedImages,
   getTrackableAttackedImages,
 } from './legacy/challengeScore';
+import { trackAnalyticsEvent } from './lib/analytics';
 
 interface GalleryTileProps {
   challengeId: number;
@@ -38,6 +41,22 @@ function GalleryTile({ challengeId, dataset, filename, unlocked }: GalleryTilePr
 export function Gallery() {
   const [dataset, setDataset] = useState<DatasetKey>('mnist');
 
+  const totalUnlocked =
+    getDatasetFoundAttackedImageCount('mnist')
+    + getDatasetFoundAttackedImageCount('imagenet');
+
+  const totalTrackable =
+    getDatasetTotalTrackableAttackedImages('mnist')
+    + getDatasetTotalTrackableAttackedImages('imagenet');
+
+  useEffect(() => {
+    trackAnalyticsEvent('gallery_viewed', {
+      dataset,
+      totalUnlocked,
+      totalTrackable,
+    });
+  }, [dataset, totalUnlocked, totalTrackable]);
+
   return (
     <div className="min-h-screen bg-[#d8d8d8] text-black">
       <Header />
@@ -52,7 +71,10 @@ export function Gallery() {
                 ? 'border-[#0d2d43] bg-[#0d2d43] text-white'
                 : 'border-black/40 bg-transparent text-black hover:bg-black/5'
             }`}
-            onClick={() => setDataset('mnist')}
+            onClick={() => {
+              trackAnalyticsEvent('gallery_dataset_selected', { dataset: 'mnist' });
+              setDataset('mnist');
+            }}
           >
             MNIST
           </button>
@@ -63,7 +85,10 @@ export function Gallery() {
                 ? 'border-[#0d2d43] bg-[#0d2d43] text-white'
                 : 'border-black/40 bg-transparent text-black hover:bg-black/5'
             }`}
-            onClick={() => setDataset('imagenet')}
+            onClick={() => {
+              trackAnalyticsEvent('gallery_dataset_selected', { dataset: 'imagenet' });
+              setDataset('imagenet');
+            }}
           >
             ImageNet
           </button>

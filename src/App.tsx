@@ -9,6 +9,7 @@ import { BlurAttack } from './attacks/BlurAttack';
 import { AdversarialPatches } from './attacks/AdversarialPatches';
 import { Gallery } from './Gallery';
 import { Help } from './Help';
+import { initAnalytics, trackAnalyticsEvent } from './lib/analytics';
 
 export default function App() {
   const navigate = useNavigate();
@@ -17,6 +18,17 @@ export default function App() {
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
   }, [location.pathname]);
+
+  useEffect(() => {
+    initAnalytics();
+  }, []);
+
+  useEffect(() => {
+    trackAnalyticsEvent('screen_view', {
+      pathname: location.pathname,
+      search: location.search,
+    });
+  }, [location.pathname, location.search]);
 
   return (
     <Routes>

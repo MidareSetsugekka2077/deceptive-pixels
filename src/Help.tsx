@@ -1,6 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Header } from './components/Header';
 import { HELP_TOPICS, TOPIC_IMAGES } from './config/helpTopics';
+import { trackAnalyticsEvent } from './lib/analytics';
 
 export function Help() {
   const [activeTopicId, setActiveTopicId] = useState(HELP_TOPICS[0].id);
@@ -17,7 +18,18 @@ export function Help() {
   const canGoBack = pageIndex > 0;
   const canGoForward = pageIndex < totalPages - 1;
 
+  useEffect(() => {
+    trackAnalyticsEvent('help_topic_viewed', {
+      topicId: activeTopic.id,
+      pageIndex,
+      totalPages,
+    });
+  }, [activeTopic.id, pageIndex, totalPages]);
+
   const selectTopic = (topicId: string) => {
+    trackAnalyticsEvent('help_topic_selected', {
+      topicId,
+    });
     setActiveTopicId(topicId);
     setPageIndex(0);
   };
@@ -65,7 +77,14 @@ export function Help() {
             <div className="mt-5 flex items-center justify-center gap-2 sm:gap-4 md:gap-6">
               <button
                 type="button"
-                onClick={() => setPageIndex((index) => Math.max(index - 1, 0))}
+                onClick={() => {
+                  trackAnalyticsEvent('help_page_navigated', {
+                    direction: 'previous',
+                    topicId: activeTopic.id,
+                    fromPage: pageIndex,
+                  });
+                  setPageIndex((index) => Math.max(index - 1, 0));
+                }}
                 disabled={!canGoBack}
                 aria-label="Previous help page"
                 className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-[3px] border-black bg-transparent text-[26px] leading-none transition-opacity disabled:cursor-not-allowed disabled:opacity-35"
@@ -102,6 +121,12 @@ export function Help() {
                     href={activeTopic.source}
                     target="_blank"
                     rel="noopener noreferrer"
+                    onClick={() => {
+                      trackAnalyticsEvent('help_learn_more_clicked', {
+                        topicId: activeTopic.id,
+                        sourceUrl: activeTopic.source,
+                      });
+                    }}
                     className="text-[14px] text-blue-600 hover:underline break-words"
                   >
                     {activeTopic.source}
@@ -111,7 +136,14 @@ export function Help() {
 
               <button
                 type="button"
-                onClick={() => setPageIndex((index) => Math.min(index + 1, totalPages - 1))}
+                onClick={() => {
+                  trackAnalyticsEvent('help_page_navigated', {
+                    direction: 'next',
+                    topicId: activeTopic.id,
+                    fromPage: pageIndex,
+                  });
+                  setPageIndex((index) => Math.min(index + 1, totalPages - 1));
+                }}
                 disabled={!canGoForward}
                 aria-label="Next help page"
                 className="flex h-[36px] w-[36px] items-center justify-center rounded-full border-[3px] border-black bg-transparent text-[26px] leading-none transition-opacity disabled:cursor-not-allowed disabled:opacity-35"

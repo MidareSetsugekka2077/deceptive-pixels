@@ -4,6 +4,7 @@ import {
 	getDatasetFoundAttackedImageCount,
 	getDatasetTotalTrackableAttackedImages,
 } from '../legacy/challengeScore';
+import { trackAnalyticsEvent } from '../lib/analytics';
 
 interface HeaderProps {
 	title?: string;
@@ -68,6 +69,9 @@ export function Header({
 						<Link
 							className="flex items-center gap-2"
 							to="/"
+							onClick={() => {
+								trackAnalyticsEvent('nav_clicked', { destination: 'title' });
+							}}
 							aria-label="Go to title screen"
 						>
 							<div className="flex h-[18px] w-[18px] items-center justify-center bg-white">
@@ -97,6 +101,9 @@ export function Header({
 						<Link
 							className="flex items-center gap-2"
 							to="/"
+							onClick={() => {
+								trackAnalyticsEvent('nav_clicked', { destination: 'title' });
+							}}
 							aria-label="Go to title screen"
 						>
 							<div className="flex h-[18px] w-[18px] items-center justify-center bg-white">
@@ -115,6 +122,9 @@ export function Header({
 					>
 						<Link
 							to="/gallery"
+							onClick={() => {
+								trackAnalyticsEvent('nav_clicked', { destination: 'gallery' });
+							}}
 							className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
 						>
 							Gallery
@@ -127,6 +137,9 @@ export function Header({
 					>
 						<Link
 							to="/help"
+							onClick={() => {
+								trackAnalyticsEvent('help_button_clicked');
+							}}
 							className="text-[30px] font-medium leading-6 tracking-[-0.3125px] sm:text-[32px]"
 						>
 							Help
