@@ -1,12 +1,18 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   BLUR_ATTACK_IMAGES,
+  EMOJI_ATTACK_IMAGES,
   IMAGENET_BLUR_ATTACK_IMAGES,
+  IMAGENET_EMOJI_ATTACK_IMAGES,
+  IMAGENET_LINE_ATTACK_IMAGES,
+  IMAGENET_MIRROR_ATTACK_IMAGES,
   IMAGENET_NOISE_ATTACK_IMAGES,
   IMAGENET_PATCH_ATTACK_IMAGES,
   IMAGENET_PIXEL_ATTACK_IMAGES,
   IMAGENET_ROTATE_ATTACK_IMAGES,
   IMAGENET_SHIFT_ATTACK_IMAGES,
+  LINE_ATTACK_IMAGES,
+  MIRROR_ATTACK_IMAGES,
   NOISE_ATTACK_IMAGES,
   PATCH_ATTACK_IMAGES,
   PIXEL_ATTACK_IMAGES,
@@ -188,6 +194,90 @@ const challengeAssetsById: Record<number, Record<DatasetKey, ChallengeAssets>> =
         filename.startsWith('failed_')
           ? `${IMAGENET_BASE}/patch/imagenet_failed_attacks_images/${filename}`
           : `${IMAGENET_BASE}/patch/imagenet_successful_attacks_images/${filename}`,
+    },
+  },
+  7: {
+    mnist: {
+      imageSet: EMOJI_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) => {
+        if (isMnistOriginal(filename)) {
+          return `${MNIST_BASE}/original/${filename}`;
+        }
+        return filename.startsWith('failed_')
+          ? `${MNIST_BASE}/emoji/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/emoji/successful_attacks_images/${filename}`;
+      },
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${MNIST_BASE}/emoji/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/emoji/successful_attacks_images/${filename}`,
+    },
+    imagenet: {
+      imageSet: IMAGENET_EMOJI_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) =>
+        isImagenetBaseOriginal(filename)
+          ? `${IMAGENET_BASE}/original/${filename}`
+          : `${IMAGENET_BASE}/emoji/imagenet_successful_attacks_images/${filename}`,
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${IMAGENET_BASE}/emoji/imagenet_failed_attacks_images/${filename}`
+          : `${IMAGENET_BASE}/emoji/imagenet_successful_attacks_images/${filename}`,
+    },
+  },
+  8: {
+    mnist: {
+      imageSet: LINE_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) => {
+        if (isMnistOriginal(filename)) {
+          return `${MNIST_BASE}/original/${filename}`;
+        }
+        return filename.startsWith('failed_')
+          ? `${MNIST_BASE}/line/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/line/successful_attacks_images/${filename}`;
+      },
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${MNIST_BASE}/line/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/line/successful_attacks_images/${filename}`,
+    },
+    imagenet: {
+      imageSet: IMAGENET_LINE_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) =>
+        isImagenetBaseOriginal(filename)
+          ? `${IMAGENET_BASE}/original/${filename}`
+          : `${IMAGENET_BASE}/line/imagenet_successful_attacks_images/${filename}`,
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${IMAGENET_BASE}/line/imagenet_failed_attacks_images/${filename}`
+          : `${IMAGENET_BASE}/line/imagenet_successful_attacks_images/${filename}`,
+    },
+  },
+  9: {
+    mnist: {
+      imageSet: MIRROR_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) => {
+        if (isMnistOriginal(filename)) {
+          return `${MNIST_BASE}/original/${filename}`;
+        }
+        return filename.startsWith('failed_')
+          ? `${MNIST_BASE}/mirror/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/mirror/successful_attacks_images/${filename}`;
+      },
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${MNIST_BASE}/mirror/failed_attacks_images/${filename}`
+          : `${MNIST_BASE}/mirror/successful_attacks_images/${filename}`,
+    },
+    imagenet: {
+      imageSet: IMAGENET_MIRROR_ATTACK_IMAGES,
+      resolveOriginalSrc: (filename) =>
+        isImagenetBaseOriginal(filename)
+          ? `${IMAGENET_BASE}/original/${filename}`
+          : `${IMAGENET_BASE}/mirror/imagenet_successful_attacks_images/${filename}`,
+      resolveAttackedSrc: (filename) =>
+        filename.startsWith('failed_')
+          ? `${IMAGENET_BASE}/mirror/imagenet_failed_attacks_images/${filename}`
+          : `${IMAGENET_BASE}/mirror/imagenet_successful_attacks_images/${filename}`,
     },
   },
 };
