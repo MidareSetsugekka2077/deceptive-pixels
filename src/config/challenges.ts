@@ -87,4 +87,43 @@ export const CHALLENGES: ChallengeConfig[] = [
       'Does not require prior knowledge of original image to attack successfully',
     ],
   },
+  {
+    id: 7,
+    title: 'Emoji Attack',
+    description: 'Find images with emoji overlays',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for sticker-like overlays on the image',
+    weaknesses: [
+      'Occlusions can hide key features from the model',
+      'Localized perturbations can still dominate model predictions',
+      'Models can over-focus on high-contrast patterns',
+    ],
+  },
+  {
+    id: 8,
+    title: 'Line Attack',
+    description: 'Find images with adversarial lines',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for unnatural straight lines crossing the image',
+    weaknesses: [
+      'Simple structural artifacts can disrupt classification',
+      'Models can be sensitive to high-contrast edges',
+      'Small geometric changes can shift feature activations',
+    ],
+  },
+  {
+    id: 9,
+    title: 'Mirror Attack',
+    description: 'Find mirrored or flipped images',
+    difficulty: 'Easy',
+    badgeVariant: 'secondary',
+    hint: 'Look for left-right or up-down symmetry changes',
+    weaknesses: [
+      'Orientation changes can break learned feature alignment',
+      'Models may not generalize to mirrored variants',
+      'Spatial priors can make flip-based attacks effective',
+    ],
+  },
 ];

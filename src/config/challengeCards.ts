@@ -131,4 +131,61 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 				'One of the strongest practical attacks because it can remain effective across positions, scales, and real-world viewing conditions.',
 		},
 	},
+	{
+		title: 'Emoji Attack',
+		description: 'Find the emoji overlay.',
+		cardIcon: '/icons/emoji.svg',
+		challengeId: 7,
+		path: '/emoji-attack',
+		previewImages: {
+			original: '/cnn/mnist/emoji/successful_attacks_images/emoji_attack_0_original_true8.png',
+			attacked: '/cnn/mnist/emoji/successful_attacks_images/emoji_attack_0_attacked_pred3_x10_y4_h8_w8.png',
+			hintAttacked: '/cnn/mnist/emoji/successful_attacks_images/emoji_attack_0_attacked_pred3_x10_y4_h8_w8.png',
+		},
+		attackDetails: {
+			description: 'Emoji Attack places a small sticker-like patch on part of the image.',
+			howItWorks:
+				'Adds a localized visual occlusion at targeted positions. Even when the underlying object is mostly visible, the added patch can redirect model attention and alter prediction.',
+			effectiveness:
+				'Often effective because the perturbation is high-contrast and structured, making it influential relative to small objects or fine features.',
+		},
+	},
+	{
+		title: 'Line Attack',
+		description: 'Find the line-perturbed image.',
+		cardIcon: '/icons/line.svg',
+		challengeId: 8,
+		path: '/line-attack',
+		previewImages: {
+			original: '/cnn/mnist/line/successful_attacks_images/black_line_2_original_true0.png',
+			attacked: '/cnn/mnist/line/successful_attacks_images/black_line_2_attacked_pred6_vertical_fixed17_start6_len12.png',
+			hintAttacked: '/cnn/mnist/line/successful_attacks_images/black_line_2_attacked_pred6_vertical_fixed17_start6_len12.png',
+		},
+		attackDetails: {
+			description: 'Line Attack draws a dark horizontal or vertical line across the image.',
+			howItWorks:
+				'Introduces a strong edge feature that interferes with the model\'s learned feature detectors. The line can mask salient regions or create misleading activations.',
+			effectiveness:
+				'Can be highly effective on models that rely on edge and contour features without robustness to synthetic artifacts.',
+		},
+	},
+	{
+		title: 'Mirror Attack',
+		description: 'Find the flipped image.',
+		cardIcon: '/icons/mirror.svg',
+		challengeId: 9,
+		path: '/mirror-attack',
+		previewImages: {
+			original: '/cnn/mnist/mirror/successful_attacks_images/mirror_attack_4_original_true2.png',
+			attacked: '/cnn/mnist/mirror/successful_attacks_images/mirror_attack_4_attacked_pred5_vertical.png',
+			hintAttacked: '/cnn/mnist/mirror/successful_attacks_images/mirror_attack_4_attacked_pred5_vertical.png',
+		},
+		attackDetails: {
+			description: 'Mirror Attack flips an image horizontally or vertically.',
+			howItWorks:
+				'Applies geometric reflection to move key features into unfamiliar spatial arrangements. This can disrupt class-specific patterns the model expects.',
+			effectiveness:
+				'Effective when training data has directional bias and the model lacks invariance to flips.',
+		},
+	},
 ];
