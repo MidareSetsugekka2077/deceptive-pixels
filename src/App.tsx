@@ -7,6 +7,9 @@ import { ShiftAttack } from './attacks/ShiftAttack';
 import { NoiseAttack } from './attacks/NoiseAttack';
 import { BlurAttack } from './attacks/BlurAttack';
 import { AdversarialPatches } from './attacks/AdversarialPatches';
+import { EmojiAttack } from './attacks/EmojiAttack';
+import { LineAttack } from './attacks/LineAttack';
+import { MirrorAttack } from './attacks/MirrorAttack';
 import { Gallery } from './Gallery';
 import { Help } from './Help';
 import { initAnalytics, trackAnalyticsEvent } from './lib/analytics';
@@ -44,6 +47,9 @@ export default function App() {
       <Route path="/random-noise-attack" element={<NoiseAttack />} />
       <Route path="/blur-attack" element={<BlurAttack />} />
       <Route path="/adversarial-patches" element={<AdversarialPatches />} />
+      <Route path="/emoji-attack" element={<EmojiAttack />} />
+      <Route path="/line-attack" element={<LineAttack />} />
+      <Route path="/mirror-attack" element={<MirrorAttack />} />
     </Routes>
   );
 }
