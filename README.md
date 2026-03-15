@@ -25,3 +25,11 @@ A challenge-based game where players try to find images that exploit each model'
 - Added badge to show which attack players are currently on.
 - Fixed tutorial disappearing after first visit bug.
 - Made game title clickable for easier navigation.
+
+### Version 4
+- Added 3 more attacks: Mirror Attack, Emoji Attack, Black Line Attack
+- Gallery Feature added
+- More info on each adversarial attack added in title screen with a "?" button
+- Added different hints for each challenge
+- Badge system added to allow players to keep track of how many unique images they have found in each challenge
+- Help Feature added
