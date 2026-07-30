@@ -1,3 +1,5 @@
+import { getPublicAssetPath } from '../lib/publicAsset';
+
 export interface ChallengeCard {
 	title: string;
 	description: string;
@@ -16,7 +18,7 @@ export interface ChallengeCard {
 	};
 }
 
-export const CHALLENGE_CARDS: ChallengeCard[] = [
+const RAW_CHALLENGE_CARDS: ChallengeCard[] = [
 	{
 		title: 'Pixel Attack',
 		description: 'Find the suspicious pixel.',
@@ -189,3 +191,17 @@ export const CHALLENGE_CARDS: ChallengeCard[] = [
 		},
 	},
 ];
+
+export const CHALLENGE_CARDS: ChallengeCard[] = RAW_CHALLENGE_CARDS.map((card) => ({
+	...card,
+	cardIcon: getPublicAssetPath(card.cardIcon),
+	previewImages: card.previewImages
+		? {
+				original: getPublicAssetPath(card.previewImages.original),
+				attacked: getPublicAssetPath(card.previewImages.attacked),
+				hintAttacked: card.previewImages.hintAttacked
+					? getPublicAssetPath(card.previewImages.hintAttacked)
+					: undefined,
+			}
+		: undefined,
+}));

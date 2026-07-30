@@ -1,3 +1,5 @@
+import { getPublicAssetPath } from '../lib/publicAsset';
+
 export interface HelpPage {
   visualLabel: string;
   body: string;
@@ -13,12 +15,12 @@ export interface HelpTopic {
 
 // Mapping of topic IDs to their help images (shown on first page only)
 export const TOPIC_IMAGES: Record<string, string> = {
-  cnn: '/help/cnn1.webp',
-  vit: '/help/vit1.png',
-  mnist: '/help/mnist.png',
-  imagenet: '/help/imagenet.webp',
-  'adversarial-attacks': '/help/adversarial_attack.png',
-  'why-care': '/help/why_care.png',
+  cnn: getPublicAssetPath('/help/cnn1.webp'),
+  vit: getPublicAssetPath('/help/vit1.png'),
+  mnist: getPublicAssetPath('/help/mnist.png'),
+  imagenet: getPublicAssetPath('/help/imagenet.webp'),
+  'adversarial-attacks': getPublicAssetPath('/help/adversarial_attack.png'),
+  'why-care': getPublicAssetPath('/help/why_care.png'),
 };
 
 export const HELP_TOPICS: HelpTopic[] = [

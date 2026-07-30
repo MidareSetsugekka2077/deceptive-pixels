@@ -20,6 +20,7 @@ import {
   SHIFT_ATTACK_IMAGES,
 } from '../config/images';
 import type { DatasetKey } from '../config/images';
+import { getPublicAssetPath } from '../lib/publicAsset';
 
 export interface ImageItem {
   id: string;
@@ -42,8 +43,8 @@ type ChallengeAssets = {
   resolveAttackedSrc: (filename: string) => string;
 };
 
-const MNIST_BASE = '/cnn/mnist';
-const IMAGENET_BASE = '/cnn/imagenet';
+const MNIST_BASE = getPublicAssetPath('/cnn/mnist');
+const IMAGENET_BASE = getPublicAssetPath('/cnn/imagenet');
 const isMnistOriginal = (filename: string) => filename.includes('_idx');
 const isImagenetBaseOriginal = (filename: string) => filename.startsWith('original_');
 
