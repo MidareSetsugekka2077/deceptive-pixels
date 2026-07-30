@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from './components/ui/card';
 import { Button } from './components/ui/button';
 import { Badge } from './components/ui/badge';
@@ -23,11 +24,17 @@ interface MainGameProps {
   dataset?: DatasetKey;
 }
 
+const datasetOptions: { key: DatasetKey; label: string }[] = [
+  { key: 'mnist', label: 'MNIST' },
+  { key: 'imagenet', label: 'ImageNet' },
+];
+
 export function MainGame({
   fixedChallengeId,
   showChallengeSelection = true,
   dataset = 'mnist',
 }: MainGameProps) {
+  const navigate = useNavigate();
   const maxChallengeScore = 30;
   const [selectedChallenge, setSelectedChallenge] = useState<number | null>(
     fixedChallengeId ?? null,
@@ -46,9 +53,32 @@ export function MainGame({
   const selectedChallengeCard = selectedChallenge
     ? CHALLENGE_CARDS.find((card) => card.challengeId === selectedChallenge)
     : null;
-  const challengeLabel = selectedChallengeConfig?.title ?? null;
   const hintOriginalImage = selectedChallengeCard?.previewImages?.original;
   const hintAttackedImage = selectedChallengeCard?.previewImages?.hintAttacked;
+  const attackOptions = CHALLENGE_CARDS.filter((card) => card.path);
+
+  const switchAttack = (path: string) => {
+    navigate(`${path}?dataset=${dataset}`);
+  };
+
+  const switchDataset = (nextDataset: DatasetKey) => {
+    if (!selectedChallengeCard?.path || nextDataset === dataset) {
+      return;
+    }
+
+    navigate(`${selectedChallengeCard.path}?dataset=${nextDataset}`);
+  };
+
+  const exitToHome = () => {
+    if (selectedChallenge) {
+      trackAnalyticsEvent('game_exit_clicked', {
+        challengeId: selectedChallenge,
+        dataset,
+      });
+    }
+
+    navigate('/');
+  };
 
   useEffect(() => {
     if (fixedChallengeId) {
@@ -67,9 +97,11 @@ export function MainGame({
 
     setScore(getStoredScore(selectedChallenge, dataset, maxChallengeScore));
     setCurrentAttemptScore(0);
+    setSelectedImageIds([]);
     setAttemptCount(0);
     setChallengeStartMs(Date.now());
-  }, [selectedChallenge, dataset]);
+    resetPhase();
+  }, [selectedChallenge, dataset, resetPhase]);
 
   useEffect(() => {
     if (!selectedChallenge) {
@@ -172,9 +204,33 @@ export function MainGame({
           <Header
             isGameplayHeader
             rightContent={
-              challengeLabel ? (
-                <div className="flex items-center gap-2 text-xl text-muted-foreground">
-                  <Badge variant="outline" className="border-[#0d2d43] border-2 text-xl">{challengeLabel}</Badge>
+              selectedChallengeCard ? (
+                <div className="flex items-center gap-2">
+                  <select
+                    value={selectedChallengeCard.path ?? ''}
+                    onChange={(event) => switchAttack(event.target.value)}
+                    className="rounded-md border-2 border-[#0d2d43] bg-white px-3 py-2 text-lg font-medium text-[#0d2d43]"
+                    aria-label="Switch attack"
+                  >
+                    {attackOptions.map((card) => (
+                      <option key={card.challengeId} value={card.path}>
+                        {card.title}
+                      </option>
+                    ))}
+                  </select>
+
+                  <select
+                    value={dataset}
+                    onChange={(event) => switchDataset(event.target.value as DatasetKey)}
+                    className="rounded-md border-2 border-[#0d2d43] bg-white px-3 py-2 text-lg font-medium text-[#0d2d43]"
+                    aria-label="Switch dataset"
+                  >
+                    {datasetOptions.map((option) => (
+                      <option key={option.key} value={option.key}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               ) : null
             }
@@ -305,21 +361,24 @@ export function MainGame({
               </div>
 
               {/* Action Buttons */}
-              <div className="flex gap-4">
+              <div className="flex flex-col gap-3">
                 {!revealed ? (
                   <Button
                     onClick={submitGuess}
                     disabled={selectedImageIds.length !== 3}
-                    className="flex-1"
+                    className="w-full"
                   >
                     <Zap className="h-4 w-4 mr-2" />
                     Submit Guess
                   </Button>
                 ) : (
-                  <Button onClick={reset} className="flex-1" variant="outline">
+                  <Button onClick={reset} className="w-full" variant="outline">
                     Try Again
                   </Button>
                 )}
+                <Button onClick={exitToHome} className="w-full" variant="outline">
+                  Exit
+                </Button>
               </div>
 
               {/* Educational Feedback */}

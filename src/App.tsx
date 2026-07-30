@@ -12,6 +12,7 @@ import { LineAttack } from './attacks/LineAttack';
 import { MirrorAttack } from './attacks/MirrorAttack';
 import { Gallery } from './Gallery';
 import { Help } from './Help';
+import { SandboxMode } from './SandboxMode';
 import { initAnalytics, trackAnalyticsEvent } from './lib/analytics';
 
 export default function App() {
@@ -39,6 +40,7 @@ export default function App() {
         path="/"
         element={<TitleScreen onPlay={() => navigate('/pixel-attack')} />}
       />
+      <Route path="/sandbox" element={<SandboxMode />} />
       <Route path="/gallery" element={<Gallery />} />
       <Route path="/help" element={<Help />} />
       <Route path="/pixel-attack" element={<PixelAttack />} />
