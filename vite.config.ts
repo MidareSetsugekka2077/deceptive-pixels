@@ -4,7 +4,7 @@ import tailwindcss from '@tailwindcss/vite'
 
 // https://vite.dev/config/
 export default defineConfig({
-  base: '/deceptive-pixels/',
+  base: process.env.CF_PAGES ? '/' : '/deceptive-pixels/',
   plugins: [
     react(),
     tailwindcss(),

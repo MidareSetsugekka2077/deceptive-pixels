@@ -1,0 +1,8 @@
+name = "deceptive-pixels"
+compatibility_date = "2026-08-03"
+pages_build_output_dir = "dist"
+
+[[d1_databases]]
+binding = "ANALYTICS_DB"
+database_name = "deceptive-pixels-analytics"
+database_id = "99ca5cab-edf4-4395-8ab4-f75bf2b746d4"
