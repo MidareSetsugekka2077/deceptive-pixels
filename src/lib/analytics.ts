@@ -27,7 +27,13 @@ let sessionEnded = false;
 
 const getAnalyticsEndpoint = () => {
   const endpoint = import.meta.env.VITE_ANALYTICS_ENDPOINT;
-  return typeof endpoint === 'string' && endpoint.length > 0 ? endpoint : null;
+  if (typeof endpoint === 'string' && endpoint.length > 0) {
+    return endpoint;
+  }
+
+  return import.meta.env.PROD && import.meta.env.BASE_URL === '/'
+    ? '/api/analytics'
+    : null;
 };
 
 const createRandomId = () => {
