@@ -68,7 +68,7 @@ export function TitleScreen({ onPlay }: TitleScreenProps) {
 						Challenge Mode
 					</button>
 					<button
-						className="rounded-[5px] border-2 border-[#ffe600] px-[44px] py-[16px] text-[24px] font-semibold leading-6 tracking-[-0.3125px] text-[#ffe600] transition-colors duration-200 hover:bg-[#ffe600] hover:text-black"
+						className="rounded-[5px] bg-[#ffe600] px-[66px] py-[20px] text-[32px] font-extrabold leading-6 tracking-[-0.3125px] text-black transition-colors duration-200 hover:bg-[#e7cf00]"
 						onClick={() => {
 							trackAnalyticsEvent('sandbox_mode_clicked');
 							navigate('/sandbox');

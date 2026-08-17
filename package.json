@@ -7,7 +7,9 @@
     "dev": "vite",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "sandbox:api": "python sandbox_api/mnist_cnn_server.py",
+    "sandbox:train-mnist": "python sandbox_api/mnist_cnn_server.py --train-mnist"
   },
   "dependencies": {
     "@radix-ui/react-dialog": "^1.1.6",
