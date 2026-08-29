@@ -1860,9 +1860,6 @@ export function SandboxMode() {
         <div className="mx-auto flex max-w-[96rem] items-center justify-between gap-4">
           <div>
             <h1 className="text-2xl font-semibold">Sandbox Mode</h1>
-            <p className="mt-1 text-sm text-neutral-600">
-              Temporary attack preview
-            </p>
           </div>
           <Button onClick={exitToHome} variant="outline">
             <ArrowLeft />
