@@ -134,8 +134,16 @@ const attackOptions: { key: AttackKey; label: string }[] = [
 
 const MNIST_BASE = getPublicAssetPath('/cnn/mnist');
 const IMAGENET_BASE = getPublicAssetPath('/cnn/imagenet');
+const configuredSandboxApiBaseUrl = import.meta.env.VITE_SANDBOX_API_URL;
 const SANDBOX_API_BASE_URL =
-  import.meta.env.VITE_SANDBOX_API_URL ?? 'http://127.0.0.1:8000';
+  typeof configuredSandboxApiBaseUrl === 'string' &&
+  configuredSandboxApiBaseUrl.length > 0
+    ? configuredSandboxApiBaseUrl.replace(/\/$/, '')
+    : import.meta.env.DEV
+      ? 'http://127.0.0.1:8000'
+      : '';
+const SANDBOX_API_UNAVAILABLE_MESSAGE =
+  'CNN classification backend is not available for this deployed site. Run the Python sandbox API locally, or deploy it separately and set VITE_SANDBOX_API_URL.';
 const MNIST_PIXEL_PATCH_SIZE = 3;
 const IMAGENET_PIXEL_PATCH_SIZE = 5;
 const MNIST_ADVERSARIAL_PATCH_SIZE = 8;
@@ -1067,20 +1075,29 @@ const classifyGeneratedAttack = async (
   selectedSample: SandboxSample,
   dataset: DatasetKey,
 ): Promise<ClassificationState> => {
-  const response = await fetch(`${SANDBOX_API_BASE_URL}/classify`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      dataset,
-      imageDataUrl: generatedAttack.src,
-      originalImageDataUrl: generatedAttack.originalDataUrl,
-      trueLabel: selectedSample.trueLabel
-        ? Number(selectedSample.trueLabel)
-        : null,
-    }),
-  });
+  if (!SANDBOX_API_BASE_URL) {
+    throw new Error(SANDBOX_API_UNAVAILABLE_MESSAGE);
+  }
+
+  let response: Response;
+  try {
+    response = await fetch(`${SANDBOX_API_BASE_URL}/classify`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        dataset,
+        imageDataUrl: generatedAttack.src,
+        originalImageDataUrl: generatedAttack.originalDataUrl,
+        trueLabel: selectedSample.trueLabel
+          ? Number(selectedSample.trueLabel)
+          : null,
+      }),
+    });
+  } catch {
+    throw new Error(SANDBOX_API_UNAVAILABLE_MESSAGE);
+  }
 
   if (!response.ok) {
     const message = await response.text();

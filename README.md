@@ -88,6 +88,24 @@ Events are always cached in browser localStorage (`analytics:eventLog`) so no da
 VITE_ANALYTICS_ENDPOINT=https://<your-pages-domain>/api/analytics
 ```
 
+### Sandbox CNN API deployment
+
+Cloudflare Pages deploys the frontend and analytics function, but it does not run
+the PyTorch CNN backend in `sandbox_api`. Local development uses
+`http://127.0.0.1:8000` when `npm run dev` is running. To make Sandbox Mode
+classification work on a public deployment, deploy the Python API separately and
+set the frontend environment variable:
+
+```bash
+VITE_SANDBOX_API_URL=https://<your-sandbox-api-domain>
+```
+
+On the Python API host, allow the deployed frontend origin:
+
+```bash
+SANDBOX_ALLOWED_ORIGINS=https://<your-pages-domain>
+```
+
 ### Example analysis queries (D1 / SQLite)
 
 ```sql

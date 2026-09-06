@@ -67,12 +67,24 @@ class ClassifyResponse(BaseModel):
 
 
 app = FastAPI(title="Deceptive Pixels Sandbox CNN API")
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=[
+
+
+def get_allowed_origins() -> list[str]:
+    configured_origins = [
+        origin.strip().rstrip("/")
+        for origin in os.getenv("SANDBOX_ALLOWED_ORIGINS", "").split(",")
+        if origin.strip()
+    ]
+    return [
         "http://127.0.0.1:5173",
         "http://localhost:5173",
-    ],
+        *configured_origins,
+    ]
+
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=get_allowed_origins(),
     allow_origin_regex=r"^http://(127\.0\.0\.1|localhost):\d+$",
     allow_methods=["*"],
     allow_headers=["*"],
