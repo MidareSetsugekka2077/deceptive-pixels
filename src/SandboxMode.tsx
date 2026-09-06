@@ -1239,6 +1239,10 @@ export function SandboxMode() {
   };
 
   const changeDataset = (nextDataset: DatasetKey) => {
+    if (nextDataset === dataset) {
+      return;
+    }
+
     setDataset(nextDataset);
     setSampleIndex(0);
     setSelectedImageSize(null);
@@ -1251,11 +1255,18 @@ export function SandboxMode() {
     setLineCoordinateInput('0');
     resetGeneratedAttack();
     trackAnalyticsEvent('sandbox_dataset_changed', {
-      dataset: nextDataset,
+      fromDataset: dataset,
+      toDataset: nextDataset,
+      attack,
     });
   };
 
   const changeSample = (nextIndex: number) => {
+    if (nextIndex === sampleIndex) {
+      return;
+    }
+
+    const nextSample = samples[nextIndex];
     setSampleIndex(nextIndex);
     setSelectedImageSize(null);
     setPixelPosition((position) => ({ ...position, x: 0, y: 0 }));
@@ -1268,14 +1279,28 @@ export function SandboxMode() {
     resetGeneratedAttack();
     trackAnalyticsEvent('sandbox_sample_changed', {
       dataset,
-      sampleIndex: nextIndex,
-      originalFilename: samples[nextIndex]?.originalFilename,
+      attack,
+      fromSampleIndex: sampleIndex,
+      toSampleIndex: nextIndex,
+      sampleId: nextSample?.id ?? null,
+      originalFilename: nextSample?.originalFilename ?? null,
     });
   };
 
   const changeAttack = (nextAttack: AttackKey) => {
+    if (nextAttack === attack) {
+      return;
+    }
+
     setAttack(nextAttack);
     resetGeneratedAttack();
+    trackAnalyticsEvent('sandbox_attack_changed', {
+      dataset,
+      sampleId: selectedSample.id,
+      originalFilename: selectedSample.originalFilename,
+      fromAttack: attack,
+      toAttack: nextAttack,
+    });
   };
 
   const changePixelCoordinate = (
@@ -1796,6 +1821,8 @@ export function SandboxMode() {
         originalFilename: selectedSample.originalFilename,
         attackDetail: nextGeneratedAttack.location,
         changedPixels: nextGeneratedAttack.changedPixels,
+        imageWidth: selectedImageSize?.width ?? null,
+        imageHeight: selectedImageSize?.height ?? null,
       });
     } catch (error) {
       const message =
@@ -1803,6 +1830,13 @@ export function SandboxMode() {
       setAttackError(message);
       setClassification({ status: 'error', message });
       setGeneratedAttack(null);
+      trackAnalyticsEvent('sandbox_attack_run_failed', {
+        dataset,
+        attack,
+        sampleId: selectedSample.id,
+        originalFilename: selectedSample.originalFilename,
+        errorMessage: message,
+      });
     } finally {
       setIsApplying(false);
     }
@@ -1833,6 +1867,26 @@ export function SandboxMode() {
           nextClassification.status === 'ready'
             ? nextClassification.prediction
             : null,
+        predictionLabel:
+          nextClassification.status === 'ready'
+            ? nextClassification.predictionLabel
+            : null,
+        confidence:
+          nextClassification.status === 'ready'
+            ? nextClassification.confidence
+            : null,
+        baselinePrediction:
+          nextClassification.status === 'ready'
+            ? nextClassification.baselinePrediction
+            : null,
+        baselineLabel:
+          nextClassification.status === 'ready'
+            ? nextClassification.baselineLabel
+            : null,
+        baselineConfidence:
+          nextClassification.status === 'ready'
+            ? nextClassification.baselineConfidence
+            : null,
         success:
           nextClassification.status === 'ready'
             ? nextClassification.success
@@ -1844,6 +1898,13 @@ export function SandboxMode() {
           ? classificationError.message
           : 'CNN classification failed';
       setClassification({ status: 'error', message });
+      trackAnalyticsEvent('sandbox_attack_classification_failed', {
+        dataset,
+        attack,
+        sampleId: selectedSample.id,
+        originalFilename: selectedSample.originalFilename,
+        errorMessage: message,
+      });
     } finally {
       setIsClassifying(false);
     }

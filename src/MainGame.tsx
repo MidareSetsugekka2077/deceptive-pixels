@@ -58,6 +58,18 @@ export function MainGame({
   const attackOptions = CHALLENGE_CARDS.filter((card) => card.path);
 
   const switchAttack = (path: string) => {
+    const nextChallengeCard = attackOptions.find((card) => card.path === path);
+    if (!nextChallengeCard || nextChallengeCard.challengeId === selectedChallenge) {
+      return;
+    }
+
+    trackAnalyticsEvent('challenge_attack_changed', {
+      fromChallengeId: selectedChallenge,
+      fromAttack: selectedChallengeCard?.title ?? null,
+      toChallengeId: nextChallengeCard.challengeId,
+      toAttack: nextChallengeCard.title,
+      dataset,
+    });
     navigate(`${path}?dataset=${dataset}`);
   };
 
@@ -66,6 +78,12 @@ export function MainGame({
       return;
     }
 
+    trackAnalyticsEvent('challenge_dataset_changed', {
+      challengeId: selectedChallengeCard.challengeId,
+      attack: selectedChallengeCard.title,
+      fromDataset: dataset,
+      toDataset: nextDataset,
+    });
     navigate(`${selectedChallengeCard.path}?dataset=${nextDataset}`);
   };
 

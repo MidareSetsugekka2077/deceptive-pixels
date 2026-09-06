@@ -45,8 +45,20 @@ A challenge-based game where players try to find images that exploit each model'
 	- `help_button_clicked`, `help_topic_selected`, `help_learn_more_clicked`
 - Challenge performance:
 	- `challenge_started`
+	- `challenge_attack_changed` (includes previous and next attack)
+	- `challenge_dataset_changed` (includes previous and next dataset)
 	- `challenge_attempt_submitted` (includes attempt number, correctness, points, elapsed time)
 	- `challenge_completed` (first time a challenge reaches 30/30, includes time to completion)
+	- `challenge_try_again_clicked`, `game_exit_clicked`
+- Sandbox exploration:
+	- `sandbox_mode_clicked`
+	- `sandbox_dataset_changed` (includes previous and next dataset)
+	- `sandbox_sample_changed` (includes previous and next sample)
+	- `sandbox_attack_changed` (includes previous and next attack)
+	- `sandbox_attack_run` (includes dataset, attack, sample, attack detail, changed pixels, image size)
+	- `sandbox_attack_classified` (includes prediction, label, confidence, baseline prediction, and success result)
+	- `sandbox_attack_run_failed`, `sandbox_attack_classification_failed`
+	- `sandbox_exit_clicked`
 - Interaction behavior:
 	- `hint_opened`
 	- help page navigation events
